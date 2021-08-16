@@ -1,10 +1,10 @@
 <template>
   <v-container fluid>
     <v-card class="mt-5 pa-3">
-      row : dense, use v-spacer
+      row : dense, use v-spacer, using cols auto
       <v-row dense>
         <v-spacer />
-        <v-col>
+        <v-col cols="auto">
           <v-card
             class="yellow pa-3"
             outlined
@@ -134,6 +134,35 @@
           </v-card>
         </v-col>
         <v-col align-self="end">
+          <v-card class="yellow pa-3">
+            col
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-card>
+    <v-card class="mt-5 pa-3 orange">
+      using align self in v-col
+      <v-row
+        justify="end"
+        :style="{ height: '120px'}"
+      >
+        <v-col cols="auto">
+          <v-card
+            class="yellow pa-3"
+            outlined
+          >
+            col
+          </v-card>
+        </v-col>
+        <v-col cols="auto">
+          <v-card
+            class="yellow pa-3"
+            rounded
+          >
+            col
+          </v-card>
+        </v-col>
+        <v-col cols="auto">
           <v-card class="yellow pa-3">
             col
           </v-card>

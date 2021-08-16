@@ -10,6 +10,11 @@ const routes = [
     component: Home
   },
   {
+    path: '/grid-list-page',
+    name: 'GridListPage',
+    component: () => import('../views/GridListPage.vue')
+  },
+  {
     path: '/grid-system',
     name: 'GridSystem',
     component: () => import('../views/GridSystem.vue')

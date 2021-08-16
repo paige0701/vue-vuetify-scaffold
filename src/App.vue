@@ -62,6 +62,7 @@ export default {
         { title: 'Profile', icon: 'mdi-image', to:"/profile" },
         { title: 'About', icon: 'mdi-help-box', to:"/about" },
         { title: 'GridSystem', icon: 'mdi-help-box', to:"/grid-system" },
+        { title: 'GridListPage', icon: 'mdi-help-box', to:"/grid-list-page" },
       ],
     }
   }
