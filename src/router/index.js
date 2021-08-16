@@ -10,6 +10,11 @@ const routes = [
     component: Home
   },
   {
+    path: '/typography',
+    name: 'Typography',
+    component: () => import('../views/Typography.vue')
+  },
+  {
     path: '/breakpoints',
     name: 'Breakpoints',
     component: () => import('../views/Breakpoints.vue')
