@@ -1,10 +1,14 @@
 <template>
-  <div class="home">
-    <div class="small">
-      <line-chart :chart-data="datacollection"></line-chart>
-      <button @click="fillData()">Randomize</button>
-    </div>
-  </div>
+  <v-container fluid>
+    <v-card class="pa-3">
+      <div class="small">
+        <line-chart :chart-data="datacollection" />
+        <button @click="fillData()">
+          Randomize
+        </button>
+      </div>
+    </v-card>
+  </v-container>
 </template>
 
 <script>
@@ -48,7 +52,7 @@ export default {
 </script>
 <style>
 .small {
-  max-width: 600px;
+  max-width: 400px;
   margin:  150px auto;
 }
 </style>

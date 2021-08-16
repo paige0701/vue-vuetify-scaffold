@@ -2,43 +2,15 @@
   <v-app>
     <v-app-bar
       app
-      color="danger"
+      color="primary"
       dark
     >
-      <div class="d-flex align-center">
-        <router-link to="/">
-          <v-img
-            alt="Vuetify Logo"
-            class="shrink mr-2"
-            contain
-            src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-            transition="scale-transition"
-            width="30"
-          />
-        </router-link>
-      </div>
-
-      <router-link to="/about">
-        About
-      </router-link> |
-      <router-link to="/profile">
-        Profile
-      </router-link>
-      <v-spacer />
-
-      <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon>mdi-heart</v-icon>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon>mdi-dots-vertical</v-icon>
-      </v-btn>
+      <v-app-bar-nav-icon @click="drawer = !drawer" />
     </v-app-bar>
-    <v-navigation-drawer app>
+    <v-navigation-drawer
+      v-model="drawer"
+      app
+    >
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="text-h6">
@@ -73,7 +45,9 @@
       </v-list>
     </v-navigation-drawer>
     <v-main>
-      <router-view />
+      <v-container fluid>
+        <router-view />
+      </v-container>
     </v-main>
   </v-app>
 </template>
@@ -82,10 +56,12 @@
 export default {
   data() {
     return {
+      drawer: false,
       items: [
         { title: 'Home', icon: 'mdi-view-dashboard', to:"/" },
         { title: 'Profile', icon: 'mdi-image', to:"/profile" },
         { title: 'About', icon: 'mdi-help-box', to:"/about" },
+        { title: 'GridSystem', icon: 'mdi-help-box', to:"/grid-system" },
       ],
     }
   }
@@ -101,8 +77,6 @@ export default {
 }
 
 #nav {
-  padding: 30px;
-
   a {
     font-weight: bold;
     color: #2c3e50;

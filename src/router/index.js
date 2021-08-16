@@ -10,6 +10,11 @@ const routes = [
     component: Home
   },
   {
+    path: '/grid-system',
+    name: 'GridSystem',
+    component: () => import('../views/GridSystem.vue')
+  },
+  {
     path: '/about',
     name: 'About',
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
