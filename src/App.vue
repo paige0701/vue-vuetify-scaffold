@@ -63,6 +63,7 @@ export default {
         { title: 'About', icon: 'mdi-help-box', to:"/about" },
         { title: 'GridSystem', icon: 'mdi-help-box', to:"/grid-system" },
         { title: 'GridListPage', icon: 'mdi-help-box', to:"/grid-list-page" },
+        { title: 'Breakpoints', icon: 'mdi-help-box', to:"/breakpoints" },
       ],
     }
   }

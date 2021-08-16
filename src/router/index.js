@@ -10,6 +10,11 @@ const routes = [
     component: Home
   },
   {
+    path: '/breakpoints',
+    name: 'Breakpoints',
+    component: () => import('../views/Breakpoints.vue')
+  },
+  {
     path: '/grid-list-page',
     name: 'GridListPage',
     component: () => import('../views/GridListPage.vue')
