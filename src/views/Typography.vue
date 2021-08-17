@@ -5,17 +5,20 @@
         typography
       </v-card-title>
       <v-container class="grey lighten-3">
+        <v-card class="pa-3 text-h2 error primary--text">
+          Contents
+        </v-card>
         <v-card
           class="pa-3"
           outlined
         >
-          <p class="text-h1">
+          <p class="text-h1 primary--text darken-1">
             Heading 1
           </p>
-          <p class="text-h2">
+          <p class="text-h2 primary--text darken-4">
             Heading 2
           </p>
-          <p class="text-h3">
+          <p class="text-h3 secondary">
             Heading 3
           </p>
           <p class="text-h4">
@@ -40,6 +43,9 @@
         typography - mobile
       </v-card-title>
       <v-container class="orange lighten-3">
+        <v-card class="pa-3 text-h2 primary">
+          Contents
+        </v-card>
         <v-card
           class="pa-3"
           outlined
