@@ -4,7 +4,10 @@
       <v-card-title>
         typography
       </v-card-title>
-      <v-container class="grey lighten-3">
+      <v-container
+        fluid
+        class="grey lighten-3"
+      >
         <v-card class="pa-3 text-h2 error primary--text">
           Contents
         </v-card>

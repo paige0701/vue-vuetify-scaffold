@@ -10,6 +10,11 @@ const routes = [
     component: Home
   },
   {
+    path: '/helper-classes',
+    name: 'HelperClasses',
+    component: () => import('../views/HelperClasses.vue')
+  },
+  {
     path: '/typography',
     name: 'Typography',
     component: () => import('../views/Typography.vue')

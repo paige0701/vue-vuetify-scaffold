@@ -65,6 +65,7 @@ export default {
         { title: 'GridListPage', icon: 'mdi-help-box', to:"/grid-list-page" },
         { title: 'Breakpoints', icon: 'mdi-help-box', to:"/breakpoints" },
         { title: 'Typography', icon: 'mdi-help-box', to:"/typography" },
+        { title: 'HelperClasses', icon: 'mdi-help-box', to:"/helper-classes" },
       ],
     }
   }
