@@ -15,7 +15,7 @@
 // @ is an alias to /src
 import LineChart from "@/components/charts/LineChart.js";
 export default {
-  name: 'Home',
+  name: 'Dashboard',
   components: {
     LineChart
   },
