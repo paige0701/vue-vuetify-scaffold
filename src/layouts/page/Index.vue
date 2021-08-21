@@ -1,12 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <v-toolbar-title>Page Layout</v-toolbar-title>
-    </v-app-bar>
+    <page-bar />
     <v-main>
       <v-container fluid>
         <router-view />
@@ -15,7 +9,11 @@
   </v-app>
 </template>
 <script>
+import PageBar from '@/layouts/page/AppBar'
 export default {
+  components: {
+    PageBar
+  }
 
 }
 </script>
