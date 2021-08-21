@@ -1,21 +1,17 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import DefaultLayout from '@/layouts/default/Index'
-import AuthenticationLayout from '@/layouts/authentication/Index'
-import PageLayout from '@/layouts/page/Index'
-import Dashboard from '@/views/Dashboard'
-import HelperClasses from "@/views/HelperClasses";
-import Typography from "@/views/Typography";
-import ProductList from "@/views/page/ProductList";
-import SignUp from "@/views/Authentication/SignUp";
-import SignIn from "@/views/Authentication/SignIn";
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    component: DefaultLayout,
+    component: () => import('@/layouts/default/Index'),
     children: [
+      {
+        path: '/',
+        name: 'Dashboard',
+        component: () => import('@/views/Dashboard')
+      },
       {
         path: '/helper-classes',
         name: 'HelperClasses',
@@ -41,47 +37,32 @@ const routes = [
         name: 'GridSystem',
         component: () => import('../views/GridSystem.vue')
       },
-      {
-        path: '/about',
-        name: 'About',
-        component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-      },
-      {
-        path: '/profile',
-        name: 'Profile',
-        component: () => import('../views/Profile.vue')
-      },
-      {
-        path: '/profile/:id',
-        name: 'ProfileDetail',
-        component: () => import('../views/ProfileDetail.vue')
-      },
     ]
   },
   {
     path: '/authentication',
-    component: AuthenticationLayout,
+    component: () => import(/* webpackChunkName: "views-authentication" */ '@/layouts/authentication/Index'),
     children: [
       {
         path: 'sign-up',
         name: 'SignUp',
-        component: SignUp
+        component: () => import(/* webpackChunkName: "views-authentication" */ '@/views/authentication/SignUp')
       },
       {
         path: 'sign-in',
         name: 'SignIn',
-        component: SignIn
+        component: () => import(/* webpackChunkName: "views-authentication" */ '@/views/authentication/SignIn')
       },
     ]
   },
   {
     path: '/page',
-    component: PageLayout,
+    component: () => import(/* webpackChunkName: "views-page" */ '@/layouts/page/Index'),
     children: [
       {
         path: 'product-list',
         name: 'ProductList',
-        component: ProductList
+        component: () => import(/* webpackChunkName: "views-product-list" */ '@/views/page/ProductList')
       },
     ]
   }
