@@ -1,8 +1,54 @@
 <template>
-  <div>Signout.vue</div>
+  <v-container class="fill-height">
+    <v-row justify="center">
+      <v-col cols="auto">
+        <v-card
+          width="460"
+          class="text-center px-12 py-15"
+        >
+          <div class="text-h4 font-weight-black mb-15">
+            Sign up
+          </div>
+          <v-text-field
+            v-model="email"
+            label="email"
+            clearable
+            prepend-icon="mdi-email"
+          />
+          <v-text-field
+            v-model="password"
+            label="password"
+            clearable
+            prepend-icon="mdi-email"
+          />
+          <v-text-field
+            v-model="passwordConfirm"
+            label="Password confirm"
+            clearable
+            prepend-icon="mdi-lock-outline"
+          />
+          <v-btn
+            block
+            x-large
+            rounded
+            color="primary"
+            class="mt-10"
+          >
+            Sign up
+          </v-btn>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 <script>
 export default {
-
+  data() {
+    return {
+      email: '',
+      password: '',
+      passwordConfirm: ''
+    }
+  }
 }
 </script>
