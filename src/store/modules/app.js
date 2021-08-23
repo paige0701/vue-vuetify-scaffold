@@ -9,10 +9,10 @@ const state = {
             {title: 'SignUp', icon: 'mdi-account-plus', to: "/authentication/sign-up"},
           ]
         },
-        {title: 'ProductList', icon: 'mdi-format-list-bulleted', to: "/page/product-list"}
+        {title: 'ProductList', icon: 'mdi-format-list-bulleted', to: "/product-list"}
       ]
     },
-    {title: 'Profile', icon: 'mdi-image', to: "/profile"},
+    {title: 'BestSellers', icon: 'mdi-book', to: "/best-sellers"},
     {title: 'About', icon: 'mdi-help-box', to: "/about"},
     {title: 'GridSystem', icon: 'mdi-help-box', to: "/grid-system"},
     {title: 'GridListPage', icon: 'mdi-help-box', to: "/grid-list-page"},

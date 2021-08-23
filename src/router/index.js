@@ -13,6 +13,11 @@ const routes = [
         component: () => import('@/views/Dashboard')
       },
       {
+        path: 'best-sellers',
+        name: 'BestSellers',
+        component: () => import('@/views/BestSellers')
+      },
+      {
         path: '/helper-classes',
         name: 'HelperClasses',
         component: () => import('../views/HelperClasses.vue')
@@ -62,7 +67,7 @@ const routes = [
       {
         path: 'product-list',
         name: 'ProductList',
-        component: () => import(/* webpackChunkName: "views-product-list" */ '@/views/page/ProductList')
+        component: () => import(/* webpackChunkName: "views-product-list" */ '@/views/ProductList')
       },
     ]
   }
