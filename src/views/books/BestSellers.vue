@@ -8,6 +8,7 @@
         <v-card
           class="mx-auto"
           max-width="344"
+          @click="goDetail(book)"
         >
           <v-img
             src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
@@ -34,14 +35,14 @@
 
             <v-btn
               icon
-              @click="show = !show"
+              @click="book.show = !book.show"
             >
-              <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+              <v-icon>{{ book.show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
             </v-btn>
           </v-card-actions>
 
           <v-expand-transition>
-            <div v-show="show">
+            <div v-show="book.show">
               <v-divider />
 
               <v-card-text>
@@ -67,7 +68,17 @@ export default {
   },
   mounted: async function () {
     const {data: {results: books}} = await bookApi.getBestSellers({list: 'hardcover-fiction'})
-    this.books = books
+    this.books = books.map((item) => {
+      return {
+        ...item,
+        show: false,
+      }
+    })
+  },
+  methods: {
+    goDetail(book) {
+      this.$router.push({name: `BestSellerDetail`, params: {id: book.book_details[0].primary_isbn10, book: book}})
+    }
   }
 }
 </script>

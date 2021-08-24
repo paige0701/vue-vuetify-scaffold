@@ -15,7 +15,13 @@ const routes = [
       {
         path: 'best-sellers',
         name: 'BestSellers',
-        component: () => import('@/views/BestSellers')
+        component: () => import('@/views/books/BestSellers'),
+      },
+      {
+        path: 'best-sellers/:id',
+        name: 'BestSellerDetail',
+        component: () => import('@/views/books/BestSellerDetail'),
+        props: true,
       },
       {
         path: '/helper-classes',
