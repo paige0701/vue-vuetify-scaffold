@@ -14,42 +14,15 @@
             src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
             height="200px"
           />
-
-          <v-card-title>
+          <v-card-subtitle>
+            Rank. {{ book.rank }}
+          </v-card-subtitle>
+          <div class="text-h5 font-weight-black">
             {{ book.book_details[0].title }}
-          </v-card-title>
-
+          </div>
           <v-card-subtitle>
             {{ book.book_details[0].author }}
           </v-card-subtitle>
-
-          <v-card-actions>
-            <v-btn
-              color="orange lighten-2"
-              text
-            >
-              Rank. {{ book.rank }}
-            </v-btn>
-
-            <v-spacer />
-
-            <v-btn
-              icon
-              @click="book.show = !book.show"
-            >
-              <v-icon>{{ book.show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
-            </v-btn>
-          </v-card-actions>
-
-          <v-expand-transition>
-            <div v-show="book.show">
-              <v-divider />
-
-              <v-card-text>
-                {{ book.book_details[0].description }}
-              </v-card-text>
-            </div>
-          </v-expand-transition>
         </v-card>
       </v-col>
     </v-row>
