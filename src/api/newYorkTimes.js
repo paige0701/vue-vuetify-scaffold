@@ -8,7 +8,7 @@ nykInstance.interceptors.request.use((config) => {
   console.info('config ?? ', config)
   config.params = {
     ...config.params,
-    'api-key': 'jSpyayJisA4vg2TrhEe6GvdGeFwfnSla'
+    'api-key': process.env.VUE_APP_ENV_NEW_YORK_TIMES_API_KEY
   }
   console.info('config ?? ', config)
   return config

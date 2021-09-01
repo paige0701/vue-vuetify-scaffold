@@ -45,8 +45,13 @@
   </v-container>
 </template>
 <script>
+import * as NaverAPI from '@/api/naver'
 export default {
-  props: ['book']
+  props: ['book'],
+  async created() {
+    const result = await NaverAPI.getBookInfo(`Billy Summers`)
+    console.info('test --', result)
+  }
 
 }
 </script>
