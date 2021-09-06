@@ -37,6 +37,22 @@
                   {{ book.book_details[0].description }}
                 </td>
               </tr>
+              <tr>
+                <td>Naver Items</td>
+                <td>
+                  <template v-for="item in naverItems.length">
+                    <div :key="item">
+                      {{ item }} :
+                      <a
+                        :href="naverItems[item-1].link"
+                        target="_blank"
+                      >
+                        {{ naverItems[item-1].link }}
+                      </a>
+                    </div>
+                  </template>
+                </td>
+              </tr>
             </tbody>
           </template>
         </v-simple-table>
@@ -47,10 +63,22 @@
 <script>
 import * as NaverAPI from '@/api/naver'
 export default {
-  props: ['book'],
-  async created() {
-    const result = await NaverAPI.getBookInfo(`Billy Summers`)
-    console.info('test --', result)
+  props: {
+    book: {
+      type: Object,
+      required: true,
+    }
+  },
+  data() {
+    return {
+      naverItems: []
+    }
+  },
+  async mounted() {
+    const {
+      data: { items },
+    } = await NaverAPI.getBookInfo(this.book.book_details[0].title)
+    this.naverItems = items
   }
 
 }
