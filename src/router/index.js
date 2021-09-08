@@ -61,8 +61,8 @@ const routes = [
       },
       {
         path: 'sign-in',
-        name: 'SignIn',
-        component: () => import(/* webpackChunkName: "views-authentication" */ '@/views/authentication/SignIn')
+        name: 'SignInMethods',
+        component: () => import(/* webpackChunkName: "views-authentication" */ '@/views/authentication/SignInMethods')
       },
     ]
   },
