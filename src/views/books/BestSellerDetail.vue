@@ -61,7 +61,6 @@
   </v-container>
 </template>
 <script>
-import * as NaverAPI from '@/api/naver'
 export default {
   props: {
     book: {
@@ -74,12 +73,14 @@ export default {
       naverItems: []
     }
   },
+  computed: {
+    bookTitle() { return this.book.book_details[0].title}
+  },
   async mounted() {
     const {
       data: { items },
-    } = await NaverAPI.getBookInfo(this.book.book_details[0].title)
+    } = await this.$api.naver.bookInfo(this.bookTitle)
     this.naverItems = items
   }
-
 }
 </script>

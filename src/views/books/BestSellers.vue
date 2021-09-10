@@ -29,8 +29,6 @@
   </v-container>
 </template>
 <script>
-import * as bookApi from '@/api/book'
-
 export default {
   name: 'BestSellers',
   data() {
@@ -39,8 +37,8 @@ export default {
       books: '',
     }
   },
-  mounted: async function () {
-    const {data: {results: books}} = await bookApi.getBestSellers({list: 'hardcover-fiction'})
+  async mounted() {
+    const {data: {results: books}} = await this.$api.nyt.getBestSellers({list: 'hardcover-fiction'})
     this.books = books.map((item) => {
       return {
         ...item,
