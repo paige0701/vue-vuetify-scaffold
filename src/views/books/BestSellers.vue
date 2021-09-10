@@ -33,18 +33,12 @@ export default {
   name: 'BestSellers',
   data() {
     return {
-      show: false,
       books: '',
     }
   },
   async mounted() {
     const {data: {results: books}} = await this.$api.nyt.getBestSellers({list: 'hardcover-fiction'})
-    this.books = books.map((item) => {
-      return {
-        ...item,
-        show: false,
-      }
-    })
+    this.books = books
   },
   methods: {
     goDetail(book) {
