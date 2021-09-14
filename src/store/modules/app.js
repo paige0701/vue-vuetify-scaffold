@@ -1,6 +1,6 @@
 const state = {
   items: [
-    {title: 'Dashboard', icon: 'mdi-view-dashboard', to: "/"},
+    {title: 'Home', icon: 'mdi-view-dashboard', to: "/"},
     {
       title: 'Pages', icon: 'mdi-menu', items: [
         {

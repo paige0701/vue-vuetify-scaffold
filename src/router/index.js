@@ -9,8 +9,8 @@ const routes = [
     children: [
       {
         path: '/',
-        name: 'Dashboard',
-        component: () => import('@/views/Dashboard')
+        name: 'Home',
+        component: () => import('@/views/Home')
       },
       {
         path: 'best-sellers',
