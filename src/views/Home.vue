@@ -147,6 +147,7 @@ export default {
   methods: {
     goExercise() {
       console.info('goExercise')
+      this.$toast.error("I'm a toast!");
     }
   }
 
