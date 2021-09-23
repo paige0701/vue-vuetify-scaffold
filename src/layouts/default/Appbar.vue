@@ -4,7 +4,7 @@
     color="primary"
     dark
   >
-    <v-app-bar-nav-icon @click="drawer = !drawer" />
+    <v-app-bar-nav-icon @click="drawer = !drawer"  />
     <v-toolbar-title>{{ $route.name }}</v-toolbar-title>
     <v-spacer />
   </v-app-bar>

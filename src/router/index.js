@@ -24,9 +24,9 @@ const routes = [
         props: true,
       },
       {
-        path: '/helper-classes',
-        name: 'HelperClasses',
-        component: () => import('../views/HelperClasses.vue')
+        path: '/calendar-view',
+        name: 'CalendarView',
+        component: () => import('../views/TheCalendarView.vue')
       },
       {
         path: '/typography',

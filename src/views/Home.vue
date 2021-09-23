@@ -4,8 +4,12 @@
       class="mx-auto"
       max-width="500"
     >
-      <v-container class="pa-10 text-h2">
-        {{ today }}
+      <v-container
+        class="pa-10"
+      >
+        <p class="text-sm-h4 text-md-h2">
+          {{ today }}
+        </p>
       </v-container>
       <v-divider />
       <v-container class="pa-10">
@@ -67,7 +71,9 @@
 
       <v-divider />
       <v-container class="pa-10">
-        <v-btn @click="goExercise">운동 시작</v-btn>
+        <v-btn @click="goExercise">
+          저장
+        </v-btn>
       </v-container>
     </v-card>
   </v-container>
