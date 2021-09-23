@@ -29,6 +29,11 @@ const routes = [
         component: () => import('../views/TheCalendarView.vue')
       },
       {
+        path: '/workouts',
+        name: 'WorkoutView',
+        component: () => import('../views/TheWorkoutView.vue')
+      },
+      {
         path: '/typography',
         name: 'Typography',
         component: () => import('../views/Typography.vue')

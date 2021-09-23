@@ -2,7 +2,7 @@ const state = {
   items: [
     {title: 'Home', icon: 'mdi-view-dashboard', to: "/"},
     {title: 'Calendar', icon: 'mdi-calendar-month', to: "/calendar-view"},
-    // {
+    {title: 'Workouts', icon: 'mdi-format-list-bulleted', to: "/workouts"},    // {
     //   title: 'Pages', icon: 'mdi-menu', items: [
     //     {
     //       title: 'Authentication', icon: 'mdi-login', items: [
