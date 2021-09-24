@@ -1,14 +1,20 @@
 <template>
-  <v-container fluid>
-    <v-row align="center">
-      <v-col cols="10">
+  <v-container>
+    <v-row
+      no-gutters
+      class="mb-5"
+    >
+      <v-col md="5">
         <v-text-field
           v-model="newWorkout"
           label="Workout name"
           hide-details="auto"
         />
       </v-col>
-      <v-col cols="2">
+      <v-col
+        cols="1"
+        align-self="end"
+      >
         <v-btn
           icon
           color="pink"
@@ -18,24 +24,37 @@
         </v-btn>
       </v-col>
     </v-row>
-    <v-list>
-      <draggable
-        v-model="workouts"
-        group="people"
-        @start="drag=true"
-        @end="drag=false"
+    <v-row
+      no-gutters
+    >
+      <v-col
+        md="5"
+        style="max-height: 500px"
+        class="overflow-y-auto"
       >
-        <v-list-item
-          v-for="element in workouts"
-          :key="element.id"
-        >
-          <v-list-item-avatar>
-            <v-icon v-text="element.icon" />
-          </v-list-item-avatar>
-          <v-list-item-title>{{ element.text }}</v-list-item-title>
-        </v-list-item>
-      </draggable>
-    </v-list>
+        <v-list>
+          <draggable
+            v-model="workouts"
+            group="people"
+            @end="onDragEnd"
+          >
+            <v-list-item
+              v-for="element in workouts"
+              :key="element.id"
+              style="cursor: pointer; text-align: left"
+            >
+              <v-list-item-title>{{ element.text }}</v-list-item-title>
+              <v-list-item-avatar>
+                <v-icon
+                  @click="removeWorkout(element.id)"
+                  v-text="`mdi-minus-circle-outline`"
+                />
+              </v-list-item-avatar>
+            </v-list-item>
+          </draggable>
+        </v-list>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 <script>
@@ -50,7 +69,7 @@ export default {
       workouts: [{
         id: '0',
         text: 'Ashtanga',
-        icon: 'mdi-nature',
+        icon: 'mdi-language',
       },
         {
           id: '1',
@@ -90,12 +109,21 @@ export default {
     }
   },
   methods: {
+    onDragEnd(v) {
+      if (v.oldIndex !== v.newIndex) {
+        console.info(`position moved from ${v.oldIndex} to ${v.newIndex}`)
+        // todo: change order API
+      }
+    },
+    removeWorkout(id) {
+      // todo: remove item with id
+      console.info('remove workout --', id)
+    },
     addItem() {
       if (this.newWorkout === '') {
         return
       }
       this.workouts.unshift({id: this.newWorkout, text: this.newWorkout, icon: ''})
-      // todo: icon
       this.newWorkout = ''
     }
   }
