@@ -46,7 +46,7 @@
               <v-list-item-title>{{ element.text }}</v-list-item-title>
               <v-list-item-avatar>
                 <v-icon
-                  @click="removeWorkout(element.id)"
+                  @click.stop="removeWorkout(element.id)"
                   v-text="`mdi-minus-circle-outline`"
                 />
               </v-list-item-avatar>
@@ -55,6 +55,40 @@
         </v-list>
       </v-col>
     </v-row>
+    <v-dialog
+      v-model="dialog"
+      max-width="290"
+    >
+      <v-card>
+        <v-card-title class="text-h5">
+          Delete workout
+        </v-card-title>
+
+        <v-card-text>
+          Are you sure you want to delete?
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer />
+
+          <v-btn
+            color="green darken-1"
+            text
+            @click="dialog = false"
+          >
+            cancel
+          </v-btn>
+
+          <v-btn
+            color="green darken-1"
+            text
+            @click="deleteWorkout"
+          >
+            OK
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 <script>
@@ -65,6 +99,7 @@ export default {
   },
   data() {
     return {
+      dialog: false,
       newWorkout: '',
       workouts: [{
         id: '0',
@@ -118,6 +153,11 @@ export default {
     removeWorkout(id) {
       // todo: remove item with id
       console.info('remove workout --', id)
+      this.dialog = true
+    },
+    deleteWorkout() {
+      // todo: delete item
+      this.dialog = false
     },
     addItem() {
       if (this.newWorkout === '') {

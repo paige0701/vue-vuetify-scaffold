@@ -152,8 +152,11 @@ export default {
   },
   methods: {
     goExercise() {
-      console.info('goExercise')
-      this.$toast.error("I'm a toast!");
+      if (!this.selected.length) {
+        this.$toast.error(`Add an exercise`);
+        return
+      }
+      this.$toast(`Add exercise`);
     }
   }
 
