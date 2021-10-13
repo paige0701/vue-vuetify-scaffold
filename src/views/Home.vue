@@ -18,7 +18,7 @@
           justify="start"
         >
           <v-col
-            v-for="(selection, i) in selections"
+            v-for="(selection, i) in selected"
             :key="selection.text"
             class="shrink"
           >
@@ -26,10 +26,6 @@
               close
               @click:close="selected.splice(i, 1)"
             >
-              <v-icon
-                left
-                v-text="selection.icon"
-              />
               {{ selection.text }}
             </v-chip>
           </v-col>
@@ -59,11 +55,6 @@
             :key="item.text"
             @click="selected.push(item)"
           >
-            <v-list-item-avatar>
-              <v-icon
-                v-text="item.icon"
-              />
-            </v-list-item-avatar>
             <v-list-item-title v-text="item.text" />
           </v-list-item>
         </template>
@@ -80,48 +71,14 @@
 </template>
 <script>
 import dayjs from "dayjs";
-
+import find from 'lodash/find'
 export default {
   name: 'TheHome',
   data() {
     return {
       today: dayjs().format('YYYY-MM-DD ddd'),
-      selectedWorkouts: ['ashtanga', 'leg', 'arm'],
       search: '',
-      items: [
-        {
-          text: 'Ashtanga',
-          icon: 'mdi-nature',
-        },
-        {
-          text: 'Leg Day',
-          icon: 'mdi-glass-wine',
-        },
-        {
-          text: 'Arm Day',
-          icon: 'mdi-calendar-range',
-        },
-        {
-          text: 'Cardio',
-          icon: 'mdi-map-marker',
-        },
-        {
-          text: 'Abs',
-          icon: 'mdi-bike',
-        },
-        {
-          text: 'Stretching',
-          icon: 'mdi-cup',
-        },
-        {
-          text: 'Form Roller',
-          icon: 'mdi-pause',
-        },
-        {
-          text: 'Tabata',
-          icon: 'mdi-walk',
-        },
-      ],
+      items: [],
       selected:[],
     }
   },
@@ -150,14 +107,81 @@ export default {
       return selections
     },
   },
+  async mounted() {
+    // get workout list
+    this.items = await this.getWorkouts()
+
+    // get existing workout for today.
+    const existingWorkouts = await this.getExistingWorkouts()
+    if (existingWorkouts.length) {
+      existingWorkouts.forEach((item) => {
+        const result = find(this.categories, {id: item.id})
+        this.selected.push(result)
+      })
+    }
+
+  },
   methods: {
+    timeout(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms))
+    },
     goExercise() {
       if (!this.selected.length) {
-        this.$toast.error(`Add an exercise`);
+        this.$toast.error(`There's nothing to add`);
         return
       }
       this.$toast(`Add exercise`);
-    }
+    },
+    async getExistingWorkouts() {
+      await this.timeout(500)
+      return  [
+        {
+          id: 1,
+          text: 'Ashtanga',
+        },
+        {
+          id: 2,
+          text: 'Leg Day',
+        },
+      ]
+    },
+    async getWorkouts() {
+      await this.timeout(500)
+      return  [
+        {
+          id: 1,
+          text: 'Ashtanga',
+        },
+        {
+          id: 2,
+          text: 'Leg Day',
+        },
+        {
+          id: 3,
+          text: 'Arm Day',
+        },
+        {
+          id :4,
+          text: 'Cardio',
+        },
+        {
+          id:5,
+          text: 'Abs',
+        },
+        {
+          id: 6,
+          text: 'Stretching',
+        },
+        {
+          id:7,
+          text: 'Form Roller',
+        },
+        {
+          id: 8,
+          text: 'Tabata',
+        },
+      ]
+    },
   }
 
 }
