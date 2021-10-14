@@ -18,7 +18,7 @@
         <v-btn
           icon
           color="pink"
-          @click="addItem"
+          @click.stop="addItem"
         >
           <v-icon>mdi-plus</v-icon>
         </v-btn>
@@ -74,7 +74,7 @@
           <v-btn
             color="green darken-1"
             text
-            @click="dialog = false"
+            @click="cancelRemoveWorkout"
           >
             cancel
           </v-btn>
@@ -93,19 +93,23 @@
 </template>
 <script>
 import draggable from 'vuedraggable'
+import remove from 'lodash/remove'
+
 export default {
   components: {
     draggable
   },
   data() {
     return {
+      selectedWorkout: '',
       dialog: false,
       newWorkout: '',
-      workouts: [{
-        id: '0',
-        text: 'Ashtanga',
-        icon: 'mdi-language',
-      },
+      workouts: [
+        {
+          id: '0',
+          text: 'Ashtanga',
+          icon: 'mdi-language',
+        },
         {
           id: '1',
           text: 'Leg Day',
@@ -141,9 +145,14 @@ export default {
           text: 'Tabata',
           icon: 'mdi-walk',
         },]
+
     }
   },
   methods: {
+    cancelRemoveWorkout() {
+      this.selectedWorkout = ''
+      this.dialog = false
+    },
     onDragEnd(v) {
       if (v.oldIndex !== v.newIndex) {
         console.info(`position moved from ${v.oldIndex} to ${v.newIndex}`)
@@ -154,10 +163,11 @@ export default {
       // todo: remove item with id
       console.info('remove workout --', id)
       this.dialog = true
+      this.selectedWorkout = id
     },
     deleteWorkout() {
-      // todo: delete item
       this.dialog = false
+      remove(this.workouts, (workout) => workout.id === this.selectedWorkout)
     },
     addItem() {
       if (this.newWorkout === '') {
