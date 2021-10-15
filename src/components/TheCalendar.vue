@@ -38,7 +38,7 @@
           <v-toolbar-title v-if="$refs.calendar">
             {{ $refs.calendar.title }}
           </v-toolbar-title>
-          <v-spacer />
+          <v-spacer/>
           <v-menu
             bottom
             right
@@ -66,9 +66,6 @@
               <v-list-item @click="type = 'month'">
                 <v-list-item-title>Month</v-list-item-title>
               </v-list-item>
-              <v-list-item @click="type = '4day'">
-                <v-list-item-title>4 days</v-list-item-title>
-              </v-list-item>
             </v-list>
           </v-menu>
         </v-toolbar>
@@ -82,8 +79,8 @@
           :event-color="getEventColor"
           :type="type"
           @click:event="showEvent"
-          @click:more="viewDay"
-          @click:date="viewDay"
+          @click:more="showEvent"
+          @click:date="showEvent"
           @change="updateRange"
         />
         <v-menu
@@ -104,8 +101,8 @@
               <v-btn icon>
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
-              <v-toolbar-title v-html="selectedEvent.name" />
-              <v-spacer />
+              <v-toolbar-title v-html="selectedEvent.name"/>
+              <v-spacer/>
               <v-btn icon>
                 <v-icon>mdi-heart</v-icon>
               </v-btn>
@@ -114,7 +111,7 @@
               </v-btn>
             </v-toolbar>
             <v-card-text>
-              <span v-html="selectedEvent.details" />
+              <span v-html="selectedEvent.details"/>
             </v-card-text>
             <v-card-actions>
               <v-btn
@@ -148,27 +145,28 @@ export default {
     colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
     names: ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'],
   }),
-  mounted () {
+  mounted() {
     this.$refs.calendar.checkChange()
   },
   methods: {
-    viewDay ({ date }) {
+    viewDay({date}) {
       this.focus = date
-      this.type = 'day'
+      this.type = 'custom-daily'
     },
-    getEventColor (event) {
+    getEventColor(event) {
       return event.color
     },
-    setToday () {
+    setToday() {
       this.focus = ''
     },
-    prev () {
+    prev() {
       this.$refs.calendar.prev()
     },
-    next () {
+    next() {
       this.$refs.calendar.next()
     },
-    showEvent ({ nativeEvent, event }) {
+    showEvent({nativeEvent, event}) {
+      console.info(event)
       const open = () => {
         this.selectedEvent = event
         this.selectedElement = nativeEvent.target
@@ -184,8 +182,23 @@ export default {
 
       nativeEvent.stopPropagation()
     },
-    updateRange ({ start, end }) {
+    updateRange({start, end}) {
+
+      console.info(start, end)
       const events = []
+
+      // start.date =  2021-10-01
+      // end.date = 2021-10-31
+      /*
+      const events = await getEvents(startDate, endDate)
+      events.push({
+          name: '운동',
+          start: 2021-10-01,
+          color: 'red',
+        })
+
+      *
+      * */
 
       const min = new Date(`${start.date}T00:00:00`)
       const max = new Date(`${end.date}T23:59:59`)
@@ -208,9 +221,24 @@ export default {
         })
       }
 
-      this.events = events
+      this.events = [{
+        name: 'Ashtanga and 3 more',
+        start: '2021-10-01',
+        color: 'green',
+        details: `<ul>
+<li>Ashtanga</li>
+<li>Arm workout</li>
+<li>Leg workout</li>
+<li>Cool down</li>
+</ul>`
+      },
+        {
+          name: '운동',
+          start: '2021-10-02',
+          color: 'red',
+        }]
     },
-    rnd (a, b) {
+    rnd(a, b) {
       return Math.floor((b - a + 1) * Math.random()) + a
     },
   },
