@@ -38,36 +38,6 @@
           <v-toolbar-title v-if="$refs.calendar">
             {{ $refs.calendar.title }}
           </v-toolbar-title>
-          <v-spacer/>
-          <v-menu
-            bottom
-            right
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                outlined
-                color="grey darken-2"
-                v-bind="attrs"
-                v-on="on"
-              >
-                <span>{{ typeToLabel[type] }}</span>
-                <v-icon right>
-                  mdi-menu-down
-                </v-icon>
-              </v-btn>
-            </template>
-            <v-list>
-              <v-list-item @click="type = 'day'">
-                <v-list-item-title>Day</v-list-item-title>
-              </v-list-item>
-              <v-list-item @click="type = 'week'">
-                <v-list-item-title>Week</v-list-item-title>
-              </v-list-item>
-              <v-list-item @click="type = 'month'">
-                <v-list-item-title>Month</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
         </v-toolbar>
       </v-sheet>
       <v-sheet height="600">
@@ -101,17 +71,13 @@
               <v-btn icon>
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
-              <v-toolbar-title v-html="selectedEvent.name"/>
-              <v-spacer/>
-              <v-btn icon>
-                <v-icon>mdi-heart</v-icon>
-              </v-btn>
-              <v-btn icon>
-                <v-icon>mdi-dots-vertical</v-icon>
-              </v-btn>
+              <v-toolbar-title v-html="selectedEvent.name" />
+              <v-spacer />
+              <v-spacer />
+              <the-dialog :date="selectedEventDate" />
             </v-toolbar>
             <v-card-text>
-              <span v-html="selectedEvent.details"/>
+              <span v-html="selectedEvent.details" />
             </v-card-text>
             <v-card-actions>
               <v-btn
@@ -129,8 +95,11 @@
   </v-row>
 </template>
 <script>
+import TheDialog from "@/components/TheDialog";
 export default {
+  components: {TheDialog},
   data: () => ({
+    selectedEventDate: '',
     focus: '',
     type: 'month',
     typeToLabel: {
@@ -149,10 +118,6 @@ export default {
     this.$refs.calendar.checkChange()
   },
   methods: {
-    viewDay({date}) {
-      this.focus = date
-      this.type = 'custom-daily'
-    },
     getEventColor(event) {
       return event.color
     },
@@ -165,8 +130,14 @@ export default {
     next() {
       this.$refs.calendar.next()
     },
-    showEvent({nativeEvent, event}) {
+    showEvent({nativeEvent, event, date}) {
+      if (!event) {
+        const today = date //2021-10-18
+        // dialog 띄우고 새로운 event 등록할거냐고 묻고 이동한다.
+        return
+      }
       console.info(event)
+      this.selectedEventDate = event.start
       const open = () => {
         this.selectedEvent = event
         this.selectedElement = nativeEvent.target
@@ -185,42 +156,6 @@ export default {
     updateRange({start, end}) {
 
       console.info(start, end)
-      const events = []
-
-      // start.date =  2021-10-01
-      // end.date = 2021-10-31
-      /*
-      const events = await getEvents(startDate, endDate)
-      events.push({
-          name: '운동',
-          start: 2021-10-01,
-          color: 'red',
-        })
-
-      *
-      * */
-
-      const min = new Date(`${start.date}T00:00:00`)
-      const max = new Date(`${end.date}T23:59:59`)
-      const days = (max.getTime() - min.getTime()) / 86400000
-      const eventCount = this.rnd(days, days + 20)
-
-      for (let i = 0; i < eventCount; i++) {
-        const allDay = this.rnd(0, 3) === 0
-        const firstTimestamp = this.rnd(min.getTime(), max.getTime())
-        const first = new Date(firstTimestamp - (firstTimestamp % 900000))
-        const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000
-        const second = new Date(first.getTime() + secondTimestamp)
-
-        events.push({
-          name: this.names[this.rnd(0, this.names.length - 1)],
-          start: first,
-          end: second,
-          color: this.colors[this.rnd(0, this.colors.length - 1)],
-          timed: !allDay,
-        })
-      }
-
       this.events = [{
         name: 'Ashtanga and 3 more',
         start: '2021-10-01',
@@ -237,9 +172,6 @@ export default {
           start: '2021-10-02',
           color: 'red',
         }]
-    },
-    rnd(a, b) {
-      return Math.floor((b - a + 1) * Math.random()) + a
     },
   },
 }
