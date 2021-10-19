@@ -108,6 +108,12 @@ export default {
     },
   },
   async mounted() {
+
+    if (this.$route.params) {
+      console.info(this.$route.params.id)
+      this.today = dayjs(this.$route.params.id).format('YYYY-MM-DD ddd')
+      // fetch exisiting ones
+    }
     // get workout list
     this.items = await this.getWorkouts()
 

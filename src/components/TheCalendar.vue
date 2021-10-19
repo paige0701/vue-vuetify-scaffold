@@ -68,7 +68,7 @@
               :color="selectedEvent.color"
               dark
             >
-              <v-btn icon>
+              <v-btn icon @click="goToEdit">
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
               <v-toolbar-title v-html="selectedEvent.name" />
@@ -92,6 +92,54 @@
         </v-menu>
       </v-sheet>
     </v-col>
+    <v-dialog
+      v-model="dialog"
+      fullscreen
+      hide-overlay
+      transition="dialog-bottom-transition"
+    >
+      <v-card>
+        <v-toolbar
+          dark
+          color="primary"
+        >
+          <v-btn
+            icon
+            dark
+            @click="dialog = false"
+          >
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+          <v-toolbar-title>Move</v-toolbar-title>
+          <v-spacer />
+        </v-toolbar>
+        <v-list
+          three-line
+          subheader
+        >
+          <v-subheader justify="center">
+            DO you want to add new workout to {{ selectedEventDate }}?
+          </v-subheader>
+          <v-card-actions>
+            <v-spacer />
+            <v-btn
+              color="green darken-1"
+              text
+              @click="dialog = false"
+            >
+              No
+            </v-btn>
+            <v-btn
+              color="red darken-1"
+              text
+              @click="goToEdit"
+            >
+              Yes
+            </v-btn>
+          </v-card-actions>
+        </v-list>
+      </v-card>
+    </v-dialog>
   </v-row>
 </template>
 <script>
@@ -107,6 +155,7 @@ export default {
       week: 'Week',
       day: 'Day',
     },
+    dialog: false,
     selectedEvent: {},
     selectedElement: null,
     selectedOpen: false,
@@ -118,6 +167,9 @@ export default {
     this.$refs.calendar.checkChange()
   },
   methods: {
+    goToEdit() {
+      this.$router.push({name: 'Home', params: {id: this.selectedEventDate}})
+    },
     getEventColor(event) {
       return event.color
     },
@@ -132,7 +184,8 @@ export default {
     },
     showEvent({nativeEvent, event, date}) {
       if (!event) {
-        const today = date //2021-10-18
+        this.selectedEventDate = date
+        this.dialog = true
         // dialog 띄우고 새로운 event 등록할거냐고 묻고 이동한다.
         return
       }
