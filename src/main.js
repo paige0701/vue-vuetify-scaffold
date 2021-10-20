@@ -6,7 +6,11 @@ import './plugins'
 import store from "@/store";
 Vue.config.productionTip = false
 import "@/api.js"
-
+Vue.directive('blur', {
+  inserted: function (el) {
+    el.onfocus = (ev) => ev.target.blur()
+  }
+});
 new Vue({
   store,
   vuetify,

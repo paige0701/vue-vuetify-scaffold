@@ -46,6 +46,7 @@
               <v-list-item-title>{{ element.text }}</v-list-item-title>
               <v-list-item-avatar>
                 <v-icon
+                  v-blur
                   @click.stop="removeWorkout(element.id)"
                   v-text="`mdi-minus-circle-outline`"
                 />
@@ -55,48 +56,22 @@
         </v-list>
       </v-col>
     </v-row>
-    <v-dialog
+    <the-confirm-dialog
       v-model="dialog"
-      max-width="290"
-    >
-      <v-card>
-        <v-card-title class="text-h5">
-          Delete workout
-        </v-card-title>
-
-        <v-card-text>
-          Are you sure you want to delete?
-        </v-card-text>
-
-        <v-card-actions>
-          <v-spacer />
-
-          <v-btn
-            color="green darken-1"
-            text
-            @click="cancelRemoveWorkout"
-          >
-            cancel
-          </v-btn>
-
-          <v-btn
-            color="green darken-1"
-            text
-            @click="deleteWorkout"
-          >
-            OK
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+      :title="`Delete workout`"
+      :description="`Are you sure you want to delete?`"
+      @close="closeDialog"
+    />
   </v-container>
 </template>
 <script>
 import draggable from 'vuedraggable'
 import remove from 'lodash/remove'
+import TheConfirmDialog from "@/components/dialogs/TheConfirmDialog";
 
 export default {
   components: {
+    TheConfirmDialog,
     draggable
   },
   data() {
@@ -149,9 +124,14 @@ export default {
     }
   },
   methods: {
-    cancelRemoveWorkout() {
-      this.selectedWorkout = ''
-      this.dialog = false
+    closeDialog(confirm) {
+      if (confirm) {
+        this.dialog = false
+        this.deleteWorkout()
+      } else {
+        this.selectedWorkout = ''
+        this.dialog = false
+      }
     },
     onDragEnd(v) {
       if (v.oldIndex !== v.newIndex) {
@@ -166,8 +146,8 @@ export default {
       this.selectedWorkout = id
     },
     deleteWorkout() {
-      this.dialog = false
       remove(this.workouts, (workout) => workout.id === this.selectedWorkout)
+      this.$toast(`Workout removed`);
     },
     addItem() {
       if (this.newWorkout === '') {
