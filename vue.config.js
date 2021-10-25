@@ -5,9 +5,8 @@ module.exports = {
   runtimeCompiler: true,
   devServer: {
     proxy: {
-      "^/naver/": {
-        target: "https://openapi.naver.com/v1",
-        pathRewrite: { "^/naver/": "/" },
+      "^/api/v1/": {
+        target: "http://localhost:8000",
         changeOrigin: true,
         logLevel: "debug"
       }

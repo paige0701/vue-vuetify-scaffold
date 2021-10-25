@@ -12,21 +12,21 @@
         </p>
       </v-container>
       <v-divider />
-      <v-container class="pa-10">
+      <v-container class="pa-10" v-if="items.length">
         <v-row
           align="center"
           justify="start"
         >
           <v-col
             v-for="(selection, i) in selected"
-            :key="selection.text"
+            :key="selection.title"
             class="shrink"
           >
             <v-chip
               close
               @click:close="selected.splice(i, 1)"
             >
-              {{ selection.text }}
+              {{ selection.title }}
             </v-chip>
           </v-col>
 
@@ -52,10 +52,10 @@
         <template v-for="item in categories">
           <v-list-item
             v-if="!selected.includes(item)"
-            :key="item.text"
+            :key="item.title"
             @click="selected.push(item)"
           >
-            <v-list-item-title v-text="item.text" />
+            <v-list-item-title v-text="item.title" />
           </v-list-item>
         </template>
       </v-list>
@@ -89,7 +89,7 @@ export default {
       if (!search) return this.items
 
       return this.items.filter(item => {
-        const text = item.text.toLowerCase()
+        const text = item.title.toLowerCase()
 
         return text.indexOf(search) > -1
       })
@@ -109,7 +109,7 @@ export default {
   },
   async mounted() {
 
-    if (this.$route.params) {
+    if (this.$route.params && this.$route.params.id) {
       console.info(this.$route.params.id)
       this.today = dayjs(this.$route.params.id).format('YYYY-MM-DD ddd')
       // fetch exisiting ones
@@ -143,50 +143,14 @@ export default {
       return  [
         {
           id: 1,
-          text: 'Ashtanga',
-        },
-        {
-          id: 2,
-          text: 'Leg Day',
+          title: 'Ashtanga',
         },
       ]
     },
     async getWorkouts() {
-      await this.timeout(500)
-      return  [
-        {
-          id: 1,
-          text: 'Ashtanga',
-        },
-        {
-          id: 2,
-          text: 'Leg Day',
-        },
-        {
-          id: 3,
-          text: 'Arm Day',
-        },
-        {
-          id :4,
-          text: 'Cardio',
-        },
-        {
-          id:5,
-          text: 'Abs',
-        },
-        {
-          id: 6,
-          text: 'Stretching',
-        },
-        {
-          id:7,
-          text: 'Form Roller',
-        },
-        {
-          id: 8,
-          text: 'Tabata',
-        },
-      ]
+
+      const {data} = await this.$api.workout.workouts()
+      return data
     },
   }
 
