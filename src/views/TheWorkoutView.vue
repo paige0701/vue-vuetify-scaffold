@@ -43,7 +43,7 @@
               :key="element.id"
               style="cursor: pointer; text-align: left"
             >
-              <v-list-item-title>{{ element.text }}</v-list-item-title>
+              <v-list-item-title>{{ element.title }}</v-list-item-title>
               <v-list-item-avatar>
                 <v-icon
                   v-blur
@@ -79,51 +79,18 @@ export default {
       selectedWorkout: '',
       dialog: false,
       newWorkout: '',
-      workouts: [
-        {
-          id: '0',
-          text: 'Ashtanga',
-          icon: 'mdi-language',
-        },
-        {
-          id: '1',
-          text: 'Leg Day',
-          icon: 'mdi-glass-wine',
-        },
-        {
-          id: '2',
-          text: 'Arm Day',
-          icon: 'mdi-calendar-range',
-        },
-        {
-          id: '3',
-          text: 'Cardio',
-          icon: 'mdi-map-marker',
-        },
-        {
-          id: '4',
-          text: 'Abs',
-          icon: 'mdi-bike',
-        },
-        {
-          id: '5',
-          text: 'Stretching',
-          icon: 'mdi-cup',
-        },
-        {
-          id: '6',
-          text: 'Form Roller',
-          icon: 'mdi-pause',
-        },
-        {
-          id: '7',
-          text: 'Tabata',
-          icon: 'mdi-walk',
-        },]
+      workouts: []
 
     }
   },
+  async mounted() {
+    this.workouts = await this.getWorkouts()
+  },
   methods: {
+    async getWorkouts() {
+      const {data} = await this.$api.workout.workouts()
+      return data
+    },
     closeDialog(confirm) {
       if (confirm) {
         this.dialog = false
@@ -145,16 +112,37 @@ export default {
       this.dialog = true
       this.selectedWorkout = id
     },
-    deleteWorkout() {
-      remove(this.workouts, (workout) => workout.id === this.selectedWorkout)
-      this.$toast(`Workout removed`);
+    async deleteWorkout() {
+      const {data} = await this.$api.workout.deleteWorkout(this.selectedWorkout)
+      if (data.showYn === 'N') {
+        this.$toast(`Workout removed`);
+        this.workouts = await this.getWorkouts()
+      } else {
+        this.$toast.error(`Workout remove failed`);
+      }
+
     },
-    addItem() {
+    async addItem() {
       if (this.newWorkout === '') {
         return
       }
-      this.workouts.unshift({id: this.newWorkout, text: this.newWorkout, icon: ''})
+
+      const r = await this.addWorkout({title: this.newWorkout})
+      if (r.title !== '') {
+        this.workouts = await this.getWorkouts()
+        this.$toast('Workout created')
+      } else {
+        this.$toast.error('failed to create workout')
+      }
       this.newWorkout = ''
+    },
+    async addWorkout(params) {
+      try {
+        const {data} = await this.$api.workout.AddWorkout(params)
+        return data
+      } catch (e) {
+        return e
+      }
     }
   }
 }
