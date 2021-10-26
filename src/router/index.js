@@ -13,6 +13,21 @@ const routes = [
         component: () => import('@/views/Home')
       },
       {
+        path: '/calendar-view',
+        name: 'CalendarView',
+        component: () => import('../views/TheCalendarView.vue')
+      },
+      {
+        path: '/workouts',
+        name: 'WorkoutView',
+        component: () => import('../views/TheWorkoutView.vue'),
+      },
+      {
+        path: '/workouts/:id',
+        name: 'WorkoutDetailView',
+        component: () => import('../views/TheWorkoutDetailView')
+      },
+      {
         path: 'best-sellers',
         name: 'BestSellers',
         component: () => import('@/views/books/BestSellers'),
@@ -22,16 +37,6 @@ const routes = [
         name: 'BestSellerDetail',
         component: () => import('@/views/books/BestSellerDetail'),
         props: true,
-      },
-      {
-        path: '/calendar-view',
-        name: 'CalendarView',
-        component: () => import('../views/TheCalendarView.vue')
-      },
-      {
-        path: '/workouts',
-        name: 'WorkoutView',
-        component: () => import('../views/TheWorkoutView.vue')
       },
       {
         path: '/typography',

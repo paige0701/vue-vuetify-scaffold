@@ -37,6 +37,7 @@
             v-for="element in workouts"
             :key="element.id"
             style="cursor: pointer; text-align: left"
+            @click="goDetail(element.id)"
           >
             <v-list-item-title>{{ element.title }}</v-list-item-title>
             <v-list-item-avatar>
@@ -87,14 +88,16 @@ export default {
       selectedWorkout: '',
       dialog: false,
       newWorkout: '',
-      workouts: []
-
+      workouts: [],
     }
   },
   async mounted() {
     this.workouts = await this.getWorkouts()
   },
   methods: {
+    goDetail(element) {
+      this.$router.push({path: `/workouts/${element}`})
+    },
     closeDialog(confirm) {
       this.dialog = false
       if (this.currentDialog === DIALOGS.ADD) {

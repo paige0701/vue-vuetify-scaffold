@@ -1,11 +1,18 @@
+const BASE_URL = `/api/v1/workouts`
 export default axios => ({
   workouts() {
-    return axios.get(`/api/v1/workouts`)
+    return axios.get(`${BASE_URL}`)
   },
   AddWorkout(params) {
-    return axios.post('/api/v1/workouts/', params)
+    return axios.post(`${BASE_URL}/`, params)
   },
   deleteWorkout(id) {
-    return axios.put(`/api/v1/workouts/${id}/`)
+    return axios.put(`${BASE_URL}/${id}/`)
+  },
+  workout(id) {
+    return axios.get(`${BASE_URL}/${id}`)
+  },
+  updateWorkout(id, params) {
+    return axios.post(`${BASE_URL}/${id}/`, params)
   }
 })
