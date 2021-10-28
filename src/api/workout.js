@@ -14,5 +14,8 @@ export default axios => ({
   },
   updateWorkout(id, params) {
     return axios.post(`${BASE_URL}/${id}/`, params)
-  }
+  },
+  loginWithKakao(params) {
+    return axios.post(`/api/v1/authentication/kakao/login/`, params)
+  },
 })
