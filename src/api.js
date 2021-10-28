@@ -18,7 +18,7 @@ const nytInstance = axios.create({
 
 const baseAxiosInstance = axios.create({})
 baseAxiosInstance.interceptors.request.use((config) => {
-  config.headers.Authorization = `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjM1NDAyNTEwLCJqdGkiOiIyODU4NjMyODY3NzQ0MDk4OTg3NjE4MmFmZjliOTI4MyIsInVzZXJfaWQiOjV9.bT2rUE1lhETZMDuk5dmQQfYtdTRq0s7N9G4xGKzmb-k`
+  config.headers.Authorization = ``
   return config
 })
 
