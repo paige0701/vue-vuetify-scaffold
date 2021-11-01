@@ -18,7 +18,7 @@ const nytInstance = axios.create({
 
 const baseAxiosInstance = axios.create({})
 baseAxiosInstance.interceptors.request.use((config) => {
-  config.headers.Authorization = ``
+  config.headers.Authorization = `Bearer ${Vue.$cookies.get('access_token')}`
   return config
 })
 

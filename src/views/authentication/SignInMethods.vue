@@ -43,11 +43,13 @@ export default {
       if (method === 'kakao') {
         Kakao.Auth.login({
           success: async (authObj) => {
-            const result = await this.$api.workout.loginWithKakao(authObj)
-            console.info(`result -- `, result)
+            const { data } = await this.$api.workout.loginWithKakao(authObj)
+            this.$cookies.set('access_token', data.access_token)
+            this.$cookies.set('refresh_token', data.refresh_token)
+            await this.$router.push({name: 'Home'})
           },
           fail: function(err) {
-            alert(JSON.stringify(err))
+            alert(`kakako login failed, ${err}`)
           },
         })
       }
