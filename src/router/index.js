@@ -96,4 +96,9 @@ const router = new VueRouter({
   routes
 })
 
+router.beforeEach((to, from, next) => {
+  if (to.name !== 'SignInMethods' && !Vue.$cookies.get('access_token')) next({ name: 'SignInMethods' })
+  else next()
+})
+
 export default router
