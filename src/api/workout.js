@@ -22,7 +22,7 @@ export default axios => ({
   logoutWithKakao() {
     return axios.post(`/api/v1/authentication/kakao/logout/`, {access_token: Vue.$cookies.get('access_token')})
   },
-  loginWithGoogle(email) {
-    return axios.post(`/api/v1/authentication/google/login/`, {access_token: Vue.$cookies.get('access_token'), email})
+  loginWithGoogle(params) {
+    return axios.post(`/api/v1/authentication/google/login/`, params)
   }
 })
