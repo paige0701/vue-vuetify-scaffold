@@ -52,11 +52,24 @@ export default {
     }
   },
   methods: {
-    onSuccess(googleUser) {
+    async onSuccess(googleUser) {
       console.info(`success -- `, googleUser)
-    },
-    onFailure() {
+      const {Zb} = googleUser
+      const {nt} = googleUser
+      const access_token = Zb.access_token
+      const email = nt.Yt
+      try {
+        const {data} = await this.$api.workout.loginWithGoogle({access_token, email})
+        this.$cookies.set('access_token', data.access_token)
+        this.$cookies.set('refresh_token', data.refresh_token)
+        await this.$router.push({name: 'Home'})
+      } catch (e) {
+        alert(`Google login failed, ${e}`)
+      }
 
+    },
+    onFailure(err) {
+      console.info(err)
     },
     login(method) {
       if (method === 'kakao') {

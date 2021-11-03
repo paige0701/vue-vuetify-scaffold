@@ -1,3 +1,4 @@
+import Vue from 'vue'
 const BASE_URL = `/api/v1/workouts`
 export default axios => ({
   workouts() {
@@ -18,4 +19,10 @@ export default axios => ({
   loginWithKakao(params) {
     return axios.post(`/api/v1/authentication/kakao/login/`, params)
   },
+  logoutWithKakao() {
+    return axios.post(`/api/v1/authentication/kakao/logout/`, {access_token: Vue.$cookies.get('access_token')})
+  },
+  loginWithGoogle(email) {
+    return axios.post(`/api/v1/authentication/google/login/`, {access_token: Vue.$cookies.get('access_token'), email})
+  }
 })
