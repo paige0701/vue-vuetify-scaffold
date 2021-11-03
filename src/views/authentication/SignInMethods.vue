@@ -1,16 +1,21 @@
 <template>
   <v-container class="fill-height">
-    <v-row justify="center">
-      <v-col
-        cols="auto"
-        class="py-15"
-      >
-        <v-card-text class="text-h2">
-          Login
+    <v-card
+      class="mx-auto"
+      max-width="344"
+    >
+      <v-container fluid>
+        <v-card-text>
+          <p class="text-h4 text--primary">
+            Login
+          </p>
+          <div class="text--primary">
+            No need to register.<br>
+            You can you Kakao or google account to login.
+          </div>
         </v-card-text>
-        <v-card>
+        <v-list-item class="justify-center">
           <a
-            class="mt-3"
             @click="login('kakao')"
           >
             <img
@@ -18,16 +23,17 @@
               width="250"
             >
           </a>
+        </v-list-item>
+        <v-list-item class="justify-center">
           <GoogleLogin
-            class="mt-3"
             :params="params"
             :render-params="renderParams"
             :on-success="onSuccess"
             :on-failure="onFailure"
           />
-        </v-card>
-      </v-col>
-    </v-row>
+        </v-list-item>
+      </v-container>
+    </v-card>
   </v-container>
 </template>
 <script>
