@@ -97,7 +97,9 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.name !== 'SignInMethods' && !Vue.$cookies.get('access_token')) next({ name: 'SignInMethods' })
+  const access_token = Vue.$cookies.get('access_token')
+  if (to.name === 'SignInMethods' && access_token) next({name: 'Home'})
+  if (to.name !== 'SignInMethods' && !access_token) next({ name: 'SignInMethods' })
   else next()
 })
 
