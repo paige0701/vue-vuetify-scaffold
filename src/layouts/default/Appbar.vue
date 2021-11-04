@@ -29,9 +29,11 @@ export default {
     }
   },
   methods: {
-    logoutUser() {
+    async logoutUser() {
+      const { data } = await this.$api.workout.logout()
       this.$cookies.set('access_token', '')
-      this.$router.push({name:'SignInMethods',})
+      this.$cookies.set('refresh_token', '')
+      await this.$router.push({name:'SignInMethods',})
     }
   }
 }

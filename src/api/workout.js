@@ -19,10 +19,10 @@ export default axios => ({
   loginWithKakao(params) {
     return axios.post(`/api/v1/authentication/kakao/login/`, params)
   },
-  logoutWithKakao() {
-    return axios.post(`/api/v1/authentication/kakao/logout/`, {access_token: Vue.$cookies.get('access_token')})
+  logout() {
+    return axios.post(`/api/v1/authentication/logout/`, {refresh_token: Vue.$cookies.get('refresh_token')})
   },
   loginWithGoogle(params) {
     return axios.post(`/api/v1/authentication/google/login/`, params)
-  }
+  },
 })

@@ -46,13 +46,14 @@ baseAxiosInstance.interceptors.response.use( (response) => {
     .then(({data}) => {
       console.info(`token ? ${data.access}`)
       console.info(`error ? ${error}`)
+      Vue.$cookies.set('access_token', data.access)
 
       // New request with new token
       const config = error.config;
       config.headers['Authorization'] = `Bearer ${data.access}`;
 
       return new Promise((resolve, reject) => {
-        axios.request(config).then(response => {
+        baseAxiosInstance.request(config).then(response => {
           resolve(response);
         }).catch((error) => {
           reject(error);
