@@ -8,30 +8,32 @@
         class="pa-10"
       >
         <p class="text-sm-h4 text-md-h2">
-          {{ today }}
+          {{ formattedTodayDate }}
         </p>
       </v-container>
       <v-divider />
-      <v-container class="pa-10" v-if="items.length">
+      <v-container
+        v-if="items.length"
+        class="pa-10"
+      >
         <v-row
           align="center"
           justify="start"
         >
           <v-col
             v-for="(selection, i) in selected"
-            :key="selection.title"
+            :key="i"
             class="shrink"
           >
             <v-chip
               close
-              @click:close="selected.splice(i, 1)"
+              @click:close="openDeleteConfirmPopup(selection)"
             >
               {{ selection.title }}
             </v-chip>
           </v-col>
 
           <v-col
-            v-if="!allSelected"
             cols="12"
           >
             <v-text-field
@@ -49,11 +51,11 @@
       <v-divider v-if="!allSelected" />
 
       <v-list>
-        <template v-for="item in categories">
+        <template v-for="(item, index) in categories">
           <v-list-item
-            v-if="!selected.includes(item)"
-            :key="item.title"
-            @click="selected.push(item)"
+            v-if="isAlreadyAdded(item)"
+            :key="index"
+            @click="addToSelected(item)"
           >
             <v-list-item-title v-text="item.title" />
           </v-list-item>
@@ -61,38 +63,50 @@
       </v-list>
 
       <v-divider />
-      <v-container class="pa-10">
-        <v-btn @click="goExercise">
-          저장
-        </v-btn>
-      </v-container>
     </v-card>
+    <the-confirm-dialog
+      v-model="dialog"
+      :title="'삭제'"
+      :description="'삭제하시겠습니다? This process cannot be undone'"
+      @close="dialogAction($event)"
+    />
   </v-container>
 </template>
 <script>
 import dayjs from "dayjs";
-import find from 'lodash/find'
+import TheConfirmDialog from "@/components/dialogs/TheConfirmDialog";
 export default {
   name: 'TheHome',
+  components: {
+    TheConfirmDialog
+  },
   data() {
     return {
-      today: dayjs().format('YYYY-MM-DD ddd'),
+      today: dayjs(),
       search: '',
       items: [],
       selected:[],
+      dialog: false,
+      selectedDeleteItem: '',
     }
   },
   computed: {
+    formattedTodayDate() {
+      return this.today.format('YYYY-MM-DD ddd')
+    },
     categories () {
-      const search = this.search.toLowerCase()
+      if (this.items.length) {
+        const search = this.search.toLowerCase()
 
-      if (!search) return this.items
+        if (!search) return this.items
 
-      return this.items.filter(item => {
-        const text = item.title.toLowerCase()
+        return this.items.filter(item => {
+          const text = item.title.toLowerCase()
 
-        return text.indexOf(search) > -1
-      })
+          return text.indexOf(search) > -1
+        })
+      }
+      return []
     },
     allSelected () {
       return this.selected.length === this.items.length
@@ -110,24 +124,58 @@ export default {
   async mounted() {
 
     if (this.$route.params && this.$route.params.id) {
-      console.info(this.$route.params.id)
-      this.today = dayjs(this.$route.params.id).format('YYYY-MM-DD ddd')
-      // fetch exisiting ones
+      this.today = dayjs(this.$route.params.id)
     }
-    // get workout list
-    this.items = await this.getWorkouts()
 
-    // get existing workout for today.
-    const existingWorkouts = await this.getExistingWorkouts()
-    if (existingWorkouts.length) {
-      existingWorkouts.forEach((item) => {
-        const result = find(this.categories, {id: item.id})
-        this.selected.push(result)
-      })
-    }
+    this.selected = await this.getRecords()
+    this.items = await this.getWorkouts()
 
   },
   methods: {
+    isAlreadyAdded( {id} ) {
+      const index = this.selected.findIndex(item => item.workoutId === id)
+      return index === -1
+    },
+    async dialogAction(data) {
+      const deleteItem = this.selectedDeleteItem
+      this.selectedDeleteItem = ''
+      this.dialog = false
+      if (data) {
+        await this.$api.workout.deleteRecord(deleteItem.id)
+        this.selected = await this.getRecords()
+      }
+    },
+    async getRecords() {
+      const {data} = await this.$api.workout.getRecords(this.today.format('YYYY-MM-DD'))
+      if (data.length) {
+        return data.map((item) => {
+          return {
+            id: item.id,
+            title: item.workout.title,
+            workoutId: item.workout.id
+          }
+        })
+      }
+      return []
+    },
+    openDeleteConfirmPopup(selection) {
+      this.selectedDeleteItem = selection
+      this.dialog = true
+    },
+    async addToSelected(item) {
+      const params = {
+        record_date: this.today.format('YYYY-MM-DD'),
+        workout: item.id,
+      }
+      try {
+        const { data } = await this.$api.workout.addRecord(params)
+        this.selected.push(item)
+        this.$toast('Workout added')
+      } catch (e) {
+        this.$toast('Failed')
+      }
+
+    },
     timeout(ms) {
       return new Promise(resolve => setTimeout(resolve, ms))
     },
@@ -141,10 +189,6 @@ export default {
     async getExistingWorkouts() {
       await this.timeout(500)
       return  [
-        {
-          id: 1,
-          title: 'Ashtanga',
-        },
       ]
     },
     async getWorkouts() {

@@ -1,4 +1,5 @@
 import Vue from 'vue'
+
 const BASE_URL = `/api/v1/workouts`
 export default axios => ({
   workouts() {
@@ -25,4 +26,13 @@ export default axios => ({
   loginWithGoogle(params) {
     return axios.post(`/api/v1/authentication/google/login/`, params)
   },
+  addRecord(params) {
+    return axios.post(`/api/v1/records/`, params)
+  },
+  deleteRecord(id) {
+    return axios.delete(`/api/v1/records/${id}`)
+  },
+  getRecords(date) {
+    return axios.get(`/api/v1/records/${date}`)
+  }
 })
