@@ -40,7 +40,7 @@
           </v-toolbar-title>
         </v-toolbar>
       </v-sheet>
-      <v-sheet height="600">
+      <v-sheet :height="height">
         <v-calendar
           ref="calendar"
           v-model="focus"
@@ -48,6 +48,7 @@
           :events="events"
           :event-color="getEventColor"
           :type="type"
+          :event-height="eventHeight"
           @click:event="showEvent"
           @click:more="showEvent"
           @click:date="showEvent"
@@ -93,6 +94,20 @@
           </v-card>
         </v-menu>
       </v-sheet>
+      <v-sheet
+        v-if="isMobile"
+        height="20vh"
+        class="mt-3"
+        style="border: 1px solid red"
+      >
+        <v-card-text>
+          <span
+            v-if="todayDetails"
+            v-html="todayDetails"
+          />
+          <span v-else>No workout please add</span>
+        </v-card-text>
+      </v-sheet>
     </v-col>
     <the-confirm-dialog
       v-model="confirmDialog"
@@ -118,7 +133,33 @@ export default {
     selectedElement: null,
     selectedOpen: false,
     events: [],
+    todayDetails: '',
   }),
+  computed: {
+    isMobile() {
+      return this.$vuetify.breakpoint.mobile
+    },
+    height() {
+      const values = {
+        xs: `60vh`,
+        sm: 500,
+        md: 500,
+        lg: `80vh`
+      }
+      const name = this.$vuetify.breakpoint.name
+      return values[name] || 550
+    },
+    eventHeight() {
+      const values = {
+        xs: 10,
+        sm: 20,
+        md: 20,
+        lg: 20
+      }
+      const name = this.$vuetify.breakpoint.name
+      return values[name] || 20
+    }
+  },
   async mounted() {
     this.$refs.calendar.checkChange()
   },
@@ -148,6 +189,12 @@ export default {
       this.$refs.calendar.next()
     },
     showEvent({nativeEvent, event, date}) {
+
+      if (this.isMobile) {
+        console.info(event)
+        this.todayDetails = event.details
+        return
+      }
 
       // 오늘보다 미래는 등록안됨
       if (dayjs(date) > dayjs() ) {
