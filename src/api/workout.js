@@ -34,5 +34,8 @@ export default axios => ({
   },
   getRecords(date) {
     return axios.get(`/api/v1/records/${date}`)
+  },
+  getMonthlyRecord(date) {
+    return axios.get(`api/v1/records/monthly/${date}`)
   }
 })

@@ -68,7 +68,10 @@
               :color="selectedEvent.color"
               dark
             >
-              <v-btn icon @click="goToEdit">
+              <v-btn
+                icon
+                @click="goToEdit"
+              >
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
               <v-toolbar-title v-html="selectedEvent.name" />
@@ -144,6 +147,8 @@
 </template>
 <script>
 import TheDialog from "@/components/TheDialog";
+import dayjs from "dayjs";
+import {map, range, reduce} from "lodash";
 export default {
   components: {TheDialog},
   data: () => ({
@@ -163,10 +168,50 @@ export default {
     colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
     names: ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'],
   }),
-  mounted() {
+  async mounted() {
     this.$refs.calendar.checkChange()
   },
   methods: {
+    getFormattedWorkoutList(workouts) {
+      if (workouts.length) {
+        const items = workouts.map((item) =>{
+          return `<li>${item.title}</li>`
+        }).join()
+        return `<ul>${items}</ul>`
+      }
+      return ''
+    },
+    async getMonthlyRecord(yearMonth) {
+      const { data: records } = await this.$api.workout.getMonthlyRecord(yearMonth)
+      const daysInMonth = dayjs().daysInMonth()
+      const vv = reduce(range(1, daysInMonth+1), (result, key) => {
+        if (key < 10) {
+          key = `0${key}`
+        }
+        (result[`${yearMonth}-${key}`] || (result[`${yearMonth}-${key}`] = {workouts: []}));
+        return result;
+      }, {})
+
+      records.forEach((item) => {
+        vv[item.record_date].workouts.push(item.workout)
+      })
+      const dates = range(1, daysInMonth+1)
+      const results = []
+      dates.forEach((v) => {
+        if (v < 10) {
+          v = `0${v}`
+        }
+        if (dayjs(`${yearMonth}-${v}`) < dayjs()) {
+          results.push({
+            name: vv[`${yearMonth}-${v}`].workouts.length? 'O' : 'X',
+            start: `${yearMonth}-${v}`,
+            color: vv[`${yearMonth}-${v}`].workouts.length? 'green' : 'red',
+            details: this.getFormattedWorkoutList(vv[`${yearMonth}-${v}`].workouts)
+          })
+        }
+      })
+      return results
+    },
     goToEdit() {
       this.$router.push({name: 'Home', params: {id: this.selectedEventDate}})
     },
@@ -206,25 +251,9 @@ export default {
 
       nativeEvent.stopPropagation()
     },
-    updateRange({start, end}) {
-
-      console.info(start, end)
-      this.events = [{
-        name: 'Ashtanga and 3 more',
-        start: '2021-10-01',
-        color: 'green',
-        details: `<ul>
-<li>Ashtanga</li>
-<li>Arm workout</li>
-<li>Leg workout</li>
-<li>Cool down</li>
-</ul>`
-      },
-        {
-          name: '운동',
-          start: '2021-10-02',
-          color: 'red',
-        }]
+    async updateRange({start}) {
+      let today = start.date.split('-')
+      this.events = await this.getMonthlyRecord(`${today[0]}-${today[1]}`)
     },
   },
 }
