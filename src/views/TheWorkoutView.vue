@@ -1,56 +1,64 @@
 <template>
-  <v-container>
-    <v-row
-      no-gutters
-      class="mb-5"
+  <v-container fluid>
+    <v-card
+      class="mx-auto"
+      max-width="500"
     >
-      <v-col md="5">
-        <v-text-field
-          v-model="newWorkout"
-          label="Workout name"
-          hide-details="auto"
-        />
-      </v-col>
-      <v-col
-        cols="1"
-        align-self="end"
+      <v-container
+        class="pa-10"
       >
-        <v-btn
-          icon
-          color="pink"
-          @click.stop="validateAddInput"
+        <v-row
+          no-gutters
+          class="mb-5"
         >
-          <v-icon>mdi-plus</v-icon>
-        </v-btn>
-      </v-col>
-    </v-row>
-    <v-row
-      no-gutters
-    >
-      <v-col
-        md="5"
-        style="max-height: 500px"
-        class="overflow-y-auto"
-      >
-        <v-list>
-          <v-list-item
-            v-for="element in workouts"
-            :key="element.id"
-            style="cursor: pointer; text-align: left"
-            @click="goDetail(element.id)"
+          <v-col md="11">
+            <v-text-field
+              v-model="newWorkout"
+              label="Workout name"
+              hide-details="auto"
+            />
+          </v-col>
+          <v-col
+            cols="1"
+            align-self="end"
           >
-            <v-list-item-title>{{ element.title }}</v-list-item-title>
-            <v-list-item-avatar>
-              <v-icon
-                v-blur
-                @click.stop="openRemoveWorkoutModal(element.id)"
-                v-text="`mdi-minus-circle-outline`"
-              />
-            </v-list-item-avatar>
-          </v-list-item>
-        </v-list>
-      </v-col>
-    </v-row>
+            <v-btn
+              icon
+              color="pink"
+              @click.stop="validateAddInput"
+            >
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-row
+          no-gutters
+        >
+          <v-col
+            style="max-height: 500px"
+            class="overflow-y-auto"
+          >
+            <v-list>
+              <v-list-item
+                v-for="element in workouts"
+                :key="element.id"
+                style="cursor: pointer; text-align: left"
+                @click="goDetail(element.id)"
+              >
+                <v-list-item-title>{{ element.title }}</v-list-item-title>
+                <v-list-item-avatar>
+                  <v-icon
+                    v-blur
+                    @click.stop="openRemoveWorkoutModal(element.id)"
+                    v-text="`mdi-minus-circle-outline`"
+                  />
+                </v-list-item-avatar>
+              </v-list-item>
+            </v-list>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-card>
     <the-confirm-dialog
       v-if="currentDialog !== ''"
       v-model="dialog"
