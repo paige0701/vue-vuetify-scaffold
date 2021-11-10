@@ -45,7 +45,7 @@
           </v-col>
         </v-row>
         <v-row
-          style="max-height: 300px"
+          :style="{height: workoutListHeight}"
           class="overflow-y-auto"
         >
           <v-col>
@@ -91,6 +91,16 @@ export default {
     }
   },
   computed: {
+    workoutListHeight() {
+      const values = {
+        xs: `300px`,
+        sm: `300px`,
+        md: `40vh`,
+        lg: `60vh`
+      }
+      const name = this.$vuetify.breakpoint.name
+      return values[name] || `40vh`
+    },
     formattedTodayDate() {
       return this.today.format('YYYY-MM-DD ddd')
     },

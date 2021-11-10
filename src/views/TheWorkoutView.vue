@@ -1,64 +1,57 @@
 <template>
-  <v-container fluid>
-    <v-card
-      class="mx-auto"
-      max-width="500"
-    >
-      <v-container
-        class="pa-10"
+  <v-card>
+    <v-container fluid>
+      <v-row
+        no-gutters
       >
-        <v-row
-          no-gutters
-          class="mb-5"
+        <v-col md="11">
+          <v-text-field
+            v-model="newWorkout"
+            label="Workout name"
+            hide-details="auto"
+          />
+        </v-col>
+        <v-col
+          cols="1"
+          align-self="end"
         >
-          <v-col md="11">
-            <v-text-field
-              v-model="newWorkout"
-              label="Workout name"
-              hide-details="auto"
-            />
-          </v-col>
-          <v-col
-            cols="1"
-            align-self="end"
+          <v-btn
+            icon
+            color="pink"
+            @click.stop="validateAddInput"
           >
-            <v-btn
-              icon
-              color="pink"
-              @click.stop="validateAddInput"
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+      <v-row
+        no-gutters
+      >
+        <v-col
+          :style="{height: workoutListHeight, maxHeight: '80vh'}"
+          class="overflow-y-auto"
+        >
+          <v-list>
+            <v-list-item
+              v-for="element in workouts"
+              :key="element.id"
+              style="cursor: pointer; text-align: left"
+              @click="goDetail(element.id)"
             >
-              <v-icon>mdi-plus</v-icon>
-            </v-btn>
-          </v-col>
-        </v-row>
-        <v-row
-          no-gutters
-        >
-          <v-col
-            style="max-height: 500px"
-            class="overflow-y-auto"
-          >
-            <v-list>
-              <v-list-item
-                v-for="element in workouts"
-                :key="element.id"
-                style="cursor: pointer; text-align: left"
-                @click="goDetail(element.id)"
-              >
-                <v-list-item-title>{{ element.title }}</v-list-item-title>
-                <v-list-item-avatar>
-                  <v-icon
-                    v-blur
-                    @click.stop="openRemoveWorkoutModal(element.id)"
-                    v-text="`mdi-minus-circle-outline`"
-                  />
-                </v-list-item-avatar>
-              </v-list-item>
-            </v-list>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-card>
+              <v-list-item-title>{{ element.title }}</v-list-item-title>
+              <v-list-item-avatar>
+                <v-icon
+                  v-blur
+                  @click.stop="openRemoveWorkoutModal(element.id)"
+                  v-text="`mdi-minus-circle-outline`"
+                />
+              </v-list-item-avatar>
+            </v-list-item>
+          </v-list>
+        </v-col>
+      </v-row>
+    </v-container>
+
     <the-confirm-dialog
       v-if="currentDialog !== ''"
       v-model="dialog"
@@ -66,7 +59,7 @@
       :description="dialogs[currentDialog].description"
       @close="closeDialog"
     />
-  </v-container>
+  </v-card>
 </template>
 <script>
 import TheConfirmDialog from "@/components/dialogs/TheConfirmDialog";
@@ -98,6 +91,18 @@ export default {
       newWorkout: '',
       workouts: [],
     }
+  },
+  computed: {
+    workoutListHeight() {
+      const values = {
+        xs: `100%`,
+        sm: `300px`,
+        md: `40vh`,
+        lg: `100%`
+      }
+      const name = this.$vuetify.breakpoint.name
+      return values[name] || `40vh`
+    },
   },
   async mounted() {
     this.workouts = await this.getWorkouts()

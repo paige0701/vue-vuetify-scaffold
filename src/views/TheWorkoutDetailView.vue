@@ -1,27 +1,30 @@
 <template>
   <v-container v-if="workout">
-    <v-row class="justify-end">
-      <v-btn @click="refreshToDefaults">
-        Refresh
-      </v-btn>
-    </v-row>
-    <v-row>
+    <v-card>
+      <v-toolbar>
+        <v-spacer />
+        <v-btn @click="refreshToDefaults">
+          Refresh
+        </v-btn>
+      </v-toolbar>
       <v-text-field
         v-model="workout.title"
+        class="mt-5 ml-5"
         label="Workout Name"
       />
-    </v-row>
-    <v-row class="">
-      <v-btn @click="openDialog(dialogKeys.EDIT)">
-        Edit
-      </v-btn>
-      <v-btn @click="openDialog(dialogKeys.CANCEL)">
-        Cancel
-      </v-btn>
-      <v-btn @click="openDialog(dialogKeys.DELETE)">
-        Delete
-      </v-btn>
-    </v-row>
+      <v-card-actions>
+        <v-btn @click="openDialog(dialogKeys.EDIT)">
+          Edit
+        </v-btn>
+        <v-btn @click="openDialog(dialogKeys.CANCEL)">
+          Cancel
+        </v-btn>
+        <v-spacer></v-spacer>
+        <v-btn @click="openDialog(dialogKeys.DELETE)">
+          Delete
+        </v-btn>
+      </v-card-actions>
+    </v-card>
     <the-confirm-dialog
       v-if="currentDialog !== ''"
       v-model="dialog"
