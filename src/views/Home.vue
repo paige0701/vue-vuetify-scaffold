@@ -1,22 +1,18 @@
 <template>
   <v-container fluid>
-    <v-card
-      class="mx-auto"
-      max-width="500"
-    >
-      <v-container
-        class="pa-10"
-      >
-        <p class="text-sm-h4 text-md-h2">
+    <v-card>
+      <v-toolbar>
+        <v-spacer />
+        <v-toolbar-title>
           {{ formattedTodayDate }}
-        </p>
-      </v-container>
-      <v-divider />
-      <v-container
-        v-if="items.length"
-        class="pa-10"
-      >
+        </v-toolbar-title>
+        <v-spacer />
+      </v-toolbar>
+      <v-container fluid>
+        <v-subheader>Selected Workouts</v-subheader>
         <v-row
+          style="max-height: 150px"
+          class="overflow-y-auto"
           align="center"
           justify="start"
         >
@@ -32,7 +28,9 @@
               {{ selection.title }}
             </v-chip>
           </v-col>
+        </v-row>
 
+        <v-row>
           <v-col
             cols="12"
           >
@@ -46,23 +44,25 @@
             />
           </v-col>
         </v-row>
+        <v-row
+          style="max-height: 300px"
+          class="overflow-y-auto"
+        >
+          <v-col>
+            <v-list>
+              <template v-for="(item, index) in categories">
+                <v-list-item
+                  v-if="isAlreadyAdded(item)"
+                  :key="index"
+                  @click="addToSelected(item)"
+                >
+                  <v-list-item-title v-text="item.title" />
+                </v-list-item>
+              </template>
+            </v-list>
+          </v-col>
+        </v-row>
       </v-container>
-
-      <v-divider v-if="!allSelected" />
-
-      <v-list>
-        <template v-for="(item, index) in categories">
-          <v-list-item
-            v-if="isAlreadyAdded(item)"
-            :key="index"
-            @click="addToSelected(item)"
-          >
-            <v-list-item-title v-text="item.title" />
-          </v-list-item>
-        </template>
-      </v-list>
-
-      <v-divider />
     </v-card>
     <the-confirm-dialog
       v-model="dialog"
@@ -141,8 +141,13 @@ export default {
       this.selectedDeleteItem = ''
       this.dialog = false
       if (data) {
-        await this.$api.workout.deleteRecord(deleteItem.id)
-        this.selected = await this.getRecords()
+        const { data : {msg} } = await this.$api.workout.deleteRecord(deleteItem.id)
+        if (msg === 'success') {
+          this.$toast('Deleted')
+          this.selected = await this.getRecords()
+        } else {
+          this.$toast.error('Delete failed')
+        }
       }
     },
     async getRecords() {
