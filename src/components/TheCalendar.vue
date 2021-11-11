@@ -4,15 +4,9 @@
       <v-sheet height="64">
         <v-toolbar
           flat
+          dense
         >
-          <v-btn
-            outlined
-            class="mr-4"
-            color="grey darken-2"
-            @click="setToday"
-          >
-            Today
-          </v-btn>
+          <v-spacer />
           <v-btn
             fab
             text
@@ -24,6 +18,9 @@
               mdi-chevron-left
             </v-icon>
           </v-btn>
+          <v-toolbar-title v-if="$refs.calendar">
+            {{ $refs.calendar.title }}
+          </v-toolbar-title>
           <v-btn
             fab
             text
@@ -35,9 +32,15 @@
               mdi-chevron-right
             </v-icon>
           </v-btn>
-          <v-toolbar-title v-if="$refs.calendar">
-            {{ $refs.calendar.title }}
-          </v-toolbar-title>
+          <v-spacer />
+          <v-btn
+            :x-small="isMobile"
+            outlined
+            color="grey darken-2"
+            @click="setToday"
+          >
+            Today
+          </v-btn>
         </v-toolbar>
       </v-sheet>
       <v-sheet :height="height">
@@ -45,13 +48,13 @@
           ref="calendar"
           v-model="focus"
           color="primary"
-          :events="events"
+          :events="eventsByBreakpoint"
           :event-color="getEventColor"
+          :event-text-color="isMobile? 'black': 'white'"
           :type="type"
-          :event-height="eventHeight"
-          @click:event="showEvent"
-          @click:more="showEvent"
-          @click:date="showEvent"
+          :event-more="false"
+          @click:event="onEventClicked"
+          @click:date="onEventClicked"
           @change="updateRange"
         />
         <v-menu
@@ -80,7 +83,12 @@
               </v-btn>
             </v-toolbar>
             <v-card-text>
-              <span v-html="selectedEvent.details" />
+              <v-list
+                v-for="item in selectedEvent.details"
+                :key="item.id"
+              >
+                <v-list-item>{{ item.title }}</v-list-item>
+              </v-list>
             </v-card-text>
             <v-card-actions>
               <v-btn
@@ -98,21 +106,47 @@
         v-if="isMobile"
         height="20vh"
         class="mt-3"
-        style="border: 1px solid red"
       >
-        <v-card-text>
-          <span
-            v-if="todayDetails"
-            v-html="todayDetails"
-          />
-          <span v-else>No workout please add</span>
-        </v-card-text>
+        <v-card>
+          <v-row no-gutters>
+            <v-toolbar
+              height="30px"
+              flat
+            >
+              <v-spacer />
+              <v-btn
+                v-if="isLaterThanToday(focus)"
+                icon
+                @click="goToEdit"
+              >
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn>
+            </v-toolbar>
+          </v-row>
+          <v-col
+            class="overflow-y-auto"
+            :style="{maxHeight: '18vh'}"
+          >
+            <v-subheader> workouts</v-subheader>
+            <v-card-text>
+              <template v-if="todayDetail.length">
+                <ul
+                  v-for="item in todayDetail"
+                  :key="item.id"
+                >
+                  <li>{{ item.title }}</li>
+                </ul>
+              </template>
+              <span v-else>No workout please add</span>
+            </v-card-text>
+          </v-col>
+        </v-card>
       </v-sheet>
     </v-col>
     <the-confirm-dialog
       v-model="confirmDialog"
       :title="'Move'"
-      :description="`DO you want to add new workout to ${selectedEventDate}`"
+      :description="`DO you want to add new workout to ${focus}`"
       @close="dialogAction($event)"
     />
   </v-row>
@@ -124,8 +158,7 @@ import TheConfirmDialog from "@/components/dialogs/TheConfirmDialog";
 export default {
   components: {TheConfirmDialog},
   data: () => ({
-    selectedEventDate: '',
-    focus: '',
+    focus: dayjs().format('YYYY-MM-DD'),
     type: 'month',
     dialog: false,
     confirmDialog: false,
@@ -134,14 +167,36 @@ export default {
     selectedOpen: false,
     events: [],
     todayDetails: '',
+    recordsByDate: '',
   }),
   computed: {
+    todayDetail() {
+      if (this.recordsByDate !== '' || this.recordsByDate.length > 0) {
+        if (this.recordsByDate[this.focus]) {
+          return this.recordsByDate[this.focus].workouts
+        }
+        return []
+      }
+      return []
+    },
+    eventsByBreakpoint() {
+      if (this.isMobile) {
+        return this.events.map((item) => {
+          return {
+            ...item,
+            mobileName: item.name,
+            name: item.name === 'O' ? '●' : '',
+          }
+        })
+      }
+      return this.events
+    },
     isMobile() {
       return this.$vuetify.breakpoint.mobile
     },
     height() {
       const values = {
-        xs: `60vh`,
+        xs: `50vh`,
         sm: 500,
         md: 500,
         lg: `80vh`
@@ -149,38 +204,30 @@ export default {
       const name = this.$vuetify.breakpoint.name
       return values[name] || 550
     },
-    eventHeight() {
-      const values = {
-        xs: 10,
-        sm: 20,
-        md: 20,
-        lg: 20
-      }
-      const name = this.$vuetify.breakpoint.name
-      return values[name] || 20
-    }
   },
   async mounted() {
     this.$refs.calendar.checkChange()
+    console.info('selected date', this.focus)
   },
   methods: {
-    getFormattedWorkoutList(workouts) {
-      if (workouts.length) {
-        const items = workouts.map((item) =>{
-          return `<li>${item.title}</li>`
-        }).join()
-        return `<ul>${items}</ul>`
-      }
-      return ''
+    isLaterThanToday(date) {
+      return dayjs(date) < dayjs()
     },
     goToEdit() {
-      this.$router.push({name: 'Home', params: {id: this.selectedEventDate}})
+      this.$router.push({name: 'Home', params: {id: this.focus}})
     },
     getEventColor(event) {
+      if (this.isMobile) {
+        return ''
+      }
       return event.color
     },
     setToday() {
-      this.focus = ''
+      this.focus = dayjs().format('YYYY-MM-DD')
+
+      if (this.recordsByDate[this.focus]) {
+        this.todayDetails = this.recordsByDate[this.focus].workouts
+      }
     },
     prev() {
       this.$refs.calendar.prev()
@@ -188,25 +235,30 @@ export default {
     next() {
       this.$refs.calendar.next()
     },
-    showEvent({nativeEvent, event, date}) {
+    onEventClicked({nativeEvent, event, date}) {
+      // 오늘보다 미래는 등록안됨
+      if (this.isLaterThanToday(date)) {
+        return
+      }
 
       if (this.isMobile) {
-        console.info(event)
-        this.todayDetails = event.details
+        if (event) {
+          this.focus = event.start
+          if (this.recordsByDate[this.focus]) {
+            this.todayDetails = this.recordsByDate[this.focus].workouts
+          }
+          return
+        }
+        this.todayDetails = []
         return
       }
 
-      // 오늘보다 미래는 등록안됨
-      if (dayjs(date) > dayjs() ) {
-        return
-      }
       if (!event) {
-        this.selectedEventDate = date
         this.confirmDialog = true
         // dialog 띄우고 새로운 event 등록할거냐고 묻고 이동한다.
         return
       }
-      this.selectedEventDate = event.start
+
       const open = () => {
         this.selectedEvent = event
         this.selectedElement = nativeEvent.target
@@ -221,15 +273,20 @@ export default {
       }
 
       nativeEvent.stopPropagation()
+
     },
     async updateRange({start}) {
       let today = start.date.split('-')
       this.events = await this.getMonthlyRecord(`${today[0]}-${today[1]}`)
+      console.info('focus -- ', this.focus)
+      if (this.recordsByDate[this.focus]) {
+        this.todayDetails = this.recordsByDate[this.focus].workouts
+      }
     },
     async getMonthlyRecord(yearMonth) {
       const { data: records } = await this.$api.workout.getMonthlyRecord(yearMonth)
       const daysInMonth = dayjs().daysInMonth()
-      const vv = reduce(range(1, daysInMonth+1), (result, key) => {
+      this.recordsByDate = reduce(range(1, daysInMonth+1), (result, key) => {
         if (key < 10) {
           key = `0${key}`
         }
@@ -238,7 +295,7 @@ export default {
       }, {})
 
       records.forEach((item) => {
-        vv[item.record_date].workouts.push(item.workout)
+        this.recordsByDate[item.record_date].workouts.push(item.workout)
       })
       const dates = range(1, daysInMonth+1)
       const results = []
@@ -248,10 +305,10 @@ export default {
         }
         if (dayjs(`${yearMonth}-${v}`) < dayjs()) {
           results.push({
-            name: vv[`${yearMonth}-${v}`].workouts.length? 'O' : 'X',
+            name: this.recordsByDate[`${yearMonth}-${v}`].workouts.length? 'O' : 'X',
             start: `${yearMonth}-${v}`,
-            color: vv[`${yearMonth}-${v}`].workouts.length? 'green' : 'red',
-            details: this.getFormattedWorkoutList(vv[`${yearMonth}-${v}`].workouts)
+            color: this.recordsByDate[`${yearMonth}-${v}`].workouts.length? 'green' : 'red',
+            details: this.recordsByDate[`${yearMonth}-${v}`].workouts
           })
         }
       })
@@ -263,6 +320,6 @@ export default {
         this.goToEdit()
       }
     },
-  },
+  }
 }
 </script>
