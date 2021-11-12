@@ -50,10 +50,10 @@
         >
           <v-col>
             <v-list>
-              <template v-for="(item, index) in categories">
+              <template v-for="item in categories">
                 <v-list-item
-                  v-if="isAlreadyAdded(item)"
-                  :key="index"
+                  v-if="item.isShow"
+                  :key="item.id"
                   @click="addToSelected(item)"
                 >
                   <v-list-item-title v-text="item.title" />
@@ -75,6 +75,7 @@
 <script>
 import dayjs from "dayjs";
 import TheConfirmDialog from "@/components/dialogs/TheConfirmDialog";
+import {findIndex} from "lodash";
 export default {
   name: 'TheHome',
   components: {
@@ -118,9 +119,6 @@ export default {
       }
       return []
     },
-    allSelected () {
-      return this.selected.length === this.items.length
-    },
     selections () {
       const selections = []
 
@@ -139,13 +137,15 @@ export default {
 
     this.selected = await this.getRecords()
     this.items = await this.getWorkouts()
+    this.items = this.items.map((v) => {
+      return {
+        ...v,
+        isShow: findIndex(this.selected, (o) => { return o.workoutId === v.id }) === -1
+      }
+    })
 
   },
   methods: {
-    isAlreadyAdded( {id} ) {
-      const index = this.selected.findIndex(item => item.workoutId === id)
-      return index === -1
-    },
     async dialogAction(data) {
       const deleteItem = this.selectedDeleteItem
       this.selectedDeleteItem = ''
@@ -155,6 +155,12 @@ export default {
         if (msg === 'success') {
           this.$toast('Deleted')
           this.selected = await this.getRecords()
+          this.items = this.items.map((v) => {
+            return {
+              ...v,
+              isShow: findIndex(this.selected, (o) => { return o.workoutId === v.id }) === -1
+            }
+          })
         } else {
           this.$toast.error('Delete failed')
         }
@@ -178,14 +184,22 @@ export default {
       this.dialog = true
     },
     async addToSelected(item) {
+      console.info(item)
       const params = {
         record_date: this.today.format('YYYY-MM-DD'),
         workout: item.id,
       }
       try {
         const { data } = await this.$api.workout.addRecord(params)
-        this.selected.push(item)
         this.$toast('Workout added')
+        this.selected = await this.getRecords()
+
+        this.items = this.items.map((v) => {
+          return {
+            ...v,
+            isShow: findIndex(this.selected, (o) => { return o.workoutId === v.id }) === -1
+          }
+        })
       } catch (e) {
         this.$toast('Failed')
       }
@@ -207,9 +221,13 @@ export default {
       ]
     },
     async getWorkouts() {
-
       const {data} = await this.$api.workout.workouts()
-      return data
+      return data.map((item) => {
+        return {
+          ...item,
+          isShow: true,
+        }
+      })
     },
   }
 
