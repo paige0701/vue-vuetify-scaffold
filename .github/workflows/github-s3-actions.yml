@@ -1,8 +1,5 @@
 name: Main CI
-on:
-  push:
-    branches:
-      - paige0701-patch-1
+on: [push]
 
 jobs:
   build:
