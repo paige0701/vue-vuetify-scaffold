@@ -2,7 +2,7 @@ name: Main CI
 on:
   push:
     branches:
-      - origin/paige0701-patch-1
+      - paige0701-patch-1
 
 jobs:
   build:
