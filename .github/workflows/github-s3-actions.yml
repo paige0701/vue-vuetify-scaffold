@@ -13,7 +13,7 @@ jobs:
 
       - name: create env file
         run: |
-          cat < EOF > .env
+          cat << EOF > .env
           BASE_URL="/"
           VUE_APP_ENV_KAKAO_SDK_API_KEY=${{ secrets.VUE_APP_ENV_KAKAO_SDK_API_KEY }}
           VUE_APP_ENV_GOOGLE_CLIENT_ID=${{ secrets.VUE_APP_ENV_GOOGLE_CLIENT_ID }}
