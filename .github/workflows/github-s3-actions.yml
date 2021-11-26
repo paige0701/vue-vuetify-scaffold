@@ -11,6 +11,17 @@ jobs:
       - name: npm install
         run: npm install
 
+      - name: create env file
+        run: |
+          cat < EOF > .env
+          BASE_URL="/"
+          VUE_APP_ENV_KAKAO_SDK_API_KEY=${{ secrets.VUE_APP_ENV_KAKAO_SDK_API_KEY }}
+          VUE_APP_ENV_GOOGLE_CLIENT_ID=${{ secrets.VUE_APP_ENV_GOOGLE_CLIENT_ID }}
+          VUE_APP_ENV_GOOGLE_CLIENT_SECRET=${{ secrets.VUE_APP_ENV_GOOGLE_CLIENT_SECRET }}
+          VUE_APP_ENV_KAKAO_CLIENT_ID=${{ secrets.VUE_APP_ENV_KAKAO_CLIENT_ID }}
+          VUE_APP_ENV_KAKAO_SECRET_KEY=${{ secrets.VUE_APP_ENV_KAKAO_SECRET_KEY }}
+          EOF
+
       - name: build
         run: npm run build
 
