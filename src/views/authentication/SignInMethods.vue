@@ -59,11 +59,11 @@ export default {
   },
   methods: {
     async onSuccess(googleUser) {
-      console.info(`success -- `, googleUser)
-      const {Zb} = googleUser
-      const {nt} = googleUser
-      const access_token = Zb.access_token
-      const email = nt.Yt
+      console.info(googleUser)
+      console.info(`success -- `, googleUser.getAuthResponse().id_token)
+      console.info(`success -- `, googleUser.getBasicProfile())
+      const access_token = googleUser.vc.access_token
+      const email = googleUser.getBasicProfile().nv
       try {
         const {data} = await this.$api.workout.loginWithGoogle({access_token, email})
         this.$cookies.set('access_token', data.access_token)
