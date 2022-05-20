@@ -1,12 +1,10 @@
 module.exports = {
   parserOptions: {
-    parser: 'babel-eslint'
+    parser: 'babel-eslint',
   },
-  extends: [
-    'plugin:vue/recommended',
-  ],
+  extends: ['plugin:vue/recommended'],
   plugins: ['vuetify'],
   rules: {
-    'vuetify/no-deprecated-classes': 'error'
-  }
-}
+    'vuetify/no-deprecated-classes': 'error',
+  },
+};

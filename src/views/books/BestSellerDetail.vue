@@ -25,8 +25,7 @@
                 <td>
                   <a
                     :href="book.amazon_product_url"
-                    target="_blank"
-                  >
+                    target="_blank">
                     {{ book.amazon_product_url }}
                   </a>
                 </td>
@@ -44,10 +43,9 @@
                     <div :key="item">
                       {{ item }} :
                       <a
-                        :href="naverItems[item-1].link"
-                        target="_blank"
-                      >
-                        {{ naverItems[item-1].link }}
+                        :href="naverItems[item - 1].link"
+                        target="_blank">
+                        {{ naverItems[item - 1].link }}
                       </a>
                     </div>
                   </template>
@@ -66,21 +64,23 @@ export default {
     book: {
       type: Object,
       required: true,
-    }
+    },
   },
   data() {
     return {
-      naverItems: []
-    }
+      naverItems: [],
+    };
   },
   computed: {
-    bookTitle() { return this.book.book_details[0].title}
+    bookTitle() {
+      return this.book.book_details[0].title;
+    },
   },
   async mounted() {
     const {
       data: { items },
-    } = await this.$api.naver.bookInfo(this.bookTitle)
-    this.naverItems = items
-  }
-}
+    } = await this.$api.naver.bookInfo(this.bookTitle);
+    this.naverItems = items;
+  },
+};
 </script>

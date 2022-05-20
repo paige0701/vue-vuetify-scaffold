@@ -2,8 +2,7 @@
   <v-bottom-navigation
     :value="value"
     color="teal"
-    grow
-  >
+    grow>
     <v-btn :to="`/calendar-view`">
       <span>Calendar</span>
       <v-icon>mdi-calendar</v-icon>
@@ -18,5 +17,5 @@
 export default {
   name: 'DefaultBottomBar',
   data: () => ({ value: 1 }),
-}
+};
 </script>

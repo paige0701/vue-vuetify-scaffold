@@ -8,8 +8,7 @@
         <v-card
           class="pa-3"
           outlined
-          :height="height"
-        >
+          :height="height">
           contents
         </v-card>
       </v-container>
@@ -22,15 +21,13 @@
         <v-dialog
           v-model="dialog"
           width="500"
-          :fullscreen="$vuetify.breakpoint.mobile"
-        >
+          :fullscreen="$vuetify.breakpoint.mobile">
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               color="red lighten-2"
               dark
               v-bind="attrs"
-              v-on="on"
-            >
+              v-on="on">
               Click Me
             </v-btn>
           </template>
@@ -41,7 +38,13 @@
             </v-card-title>
 
             <v-card-text>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit in voluptate velit esse cillum dolore eu fugiat
+              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+              sunt in culpa qui officia deserunt mollit anim id est laborum.
             </v-card-text>
 
             <v-divider />
@@ -51,8 +54,7 @@
               <v-btn
                 color="primary"
                 text
-                @click="dialog = false"
-              >
+                @click="dialog = false">
                 I accept
               </v-btn>
             </v-card-actions>
@@ -67,7 +69,7 @@ export default {
   data() {
     return {
       dialog: false,
-    }
+    };
   },
   computed: {
     height() {
@@ -75,11 +77,11 @@ export default {
         xs: 100,
         sm: 200,
         md: 300,
-        lg: 400
-      }
-      const name = this.$vuetify.breakpoint.name
-      return values[name] || 500
-    }
-  }
-}
+        lg: 400,
+      };
+      const name = this.$vuetify.breakpoint.name;
+      return values[name] || 500;
+    },
+  },
+};
 </script>

@@ -3,8 +3,7 @@
     <v-list-item
       :key="item.title"
       link
-      :to="item.to"
-    >
+      :to="item.to">
       <v-list-item-icon>
         <v-icon>{{ item.icon }}</v-icon>
       </v-list-item-icon>
@@ -21,8 +20,8 @@ export default {
   props: {
     item: {
       type: Object,
-      default: () => ({})
-    }
-  }
-}
+      default: () => ({}),
+    },
+  },
+};
 </script>

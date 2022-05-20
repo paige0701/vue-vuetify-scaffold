@@ -1,13 +1,10 @@
 <template>
   <v-card>
     <v-container fluid>
-      <v-row
-        align="center"
-      >
+      <v-row align="center">
         <v-col
           cols="12"
-          sm="6"
-        >
+          sm="6">
           <v-select
             v-model="value"
             :items="items"
@@ -15,8 +12,7 @@
             :chips="isChip"
             label="Chips"
             :multiple="isMultiple"
-            outlined
-          />
+            outlined />
         </v-col>
       </v-row>
     </v-container>
@@ -37,14 +33,14 @@ export default {
     items: {
       type: Array,
       default: () => {
-        return []
-      }
-    }
+        return [];
+      },
+    },
   },
   data() {
     return {
       value: '',
-    }
-  }
-}
+    };
+  },
+};
 </script>
