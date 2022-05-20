@@ -5,8 +5,7 @@
     close
     :color="randomColour"
     outlined
-    @click="$emit('delete')"
-  >
+    @click="$emit('delete')">
     {{ name }}
   </v-chip>
 </template>
@@ -16,18 +15,18 @@ export default {
   props: {
     name: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
-      isShow: true
-    }
+      isShow: true,
+    };
   },
   computed: {
     randomColour() {
-      return '#'+(Math.random()*0xFFFFFF<<0).toString(16)
-    }
-  }
-}
+      return '#' + ((Math.random() * 0xffffff) << 0).toString(16);
+    },
+  },
+};
 </script>

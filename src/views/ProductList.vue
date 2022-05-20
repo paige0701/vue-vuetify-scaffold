@@ -7,19 +7,18 @@
         cols="12"
         sm="5"
         md="4"
-        lg="3"
-      >
+        lg="3">
         <product-item />
       </v-col>
     </v-row>
   </v-container>
 </template>
 <script>
-import ProductItem from "@/components/product/ProductItem";
+import ProductItem from '@/components/product/ProductItem';
 export default {
-   name: 'ProductList',
+  name: 'ProductList',
   components: {
-    ProductItem
-  }
-}
+    ProductItem,
+  },
+};
 </script>

@@ -9,11 +9,10 @@
   </v-app>
 </template>
 <script>
-import PageBar from '@/layouts/page/AppBar'
+import PageBar from '@/layouts/page/AppBar';
 export default {
   components: {
-    PageBar
-  }
-
-}
+    PageBar,
+  },
+};
 </script>

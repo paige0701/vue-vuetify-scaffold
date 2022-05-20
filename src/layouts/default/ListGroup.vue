@@ -1,7 +1,5 @@
 <template>
-  <v-list-group
-    :prepend-icon="item.icon"
-  >
+  <v-list-group :prepend-icon="item.icon">
     <template v-slot:activator>
       <v-list-item-content>
         <v-list-item-title>
@@ -9,22 +7,20 @@
         </v-list-item-title>
       </v-list-item-content>
     </template>
-    <template v-for="(child,index) in item.items">
+    <template v-for="(child, index) in item.items">
       <default-list-group
         v-if="child.items"
         :key="`sub-group-${index}`"
-        :item="child"
-      />
+        :item="child" />
       <default-list-item
         v-else
         :key="`child-${index}`"
-        :item="child"
-      />
+        :item="child" />
     </template>
   </v-list-group>
 </template>
 <script>
-import DefaultListItem from '@/layouts/default/ListItem'
+import DefaultListItem from '@/layouts/default/ListItem';
 export default {
   name: 'DefaultListGroup',
   components: {
@@ -33,8 +29,8 @@ export default {
   props: {
     item: {
       type: Object,
-      default: () => ({})
-    }
-  }
-}
+      default: () => ({}),
+    },
+  },
+};
 </script>

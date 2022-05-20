@@ -4,8 +4,8 @@
   </v-container>
 </template>
 <script>
-import TheCalendar from "@/components/TheCalendar";
+import TheCalendar from '@/components/TheCalendar';
 export default {
-  components: {TheCalendar}
-}
+  components: { TheCalendar },
+};
 </script>
